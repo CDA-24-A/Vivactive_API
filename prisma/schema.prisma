@@ -19,12 +19,12 @@ model Citizen {
   name  String 
   surname String
   password String
-  // role Role  @relation(fields: [id], references: [id])
-  // roleId String @unique
+  role Role @relation(fields: [roleId], references: [id])
+  roleId String @unique
 }
 
 model Role {
   id  String  @id @default(uuid())
   name String @unique
-  // citizen Citizen?
+  citizen Citizen?
 }

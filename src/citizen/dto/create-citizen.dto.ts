@@ -9,6 +9,6 @@ export class CreateCitizenDto {
   email: string;
   @IsNotEmpty()
   password: string;
-  //   @IsNotEmpty()
-  //   roleId: string;
+  @IsNotEmpty()
+  roleId: string;
 }

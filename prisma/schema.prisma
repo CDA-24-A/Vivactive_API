@@ -6,6 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["relationJoins"]
 }
 
 datasource db {
@@ -20,11 +21,11 @@ model Citizen {
   surname String
   password String
   role Role @relation(fields: [roleId], references: [id])
-  roleId String @unique
+  roleId String
 }
 
 model Role {
   id  String  @id @default(uuid())
   name String @unique
-  citizen Citizen?
+  citizen Citizen[]
 }

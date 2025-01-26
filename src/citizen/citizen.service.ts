@@ -11,7 +11,18 @@ export class CitizenService {
   }
 
   findAll() {
-    return `This action returns all citizen`;
+    return this.prisma.citizen.findMany({
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        surname: true,
+        password: true,
+        role: {
+          select: { name: true },
+        },
+      },
+    });
   }
 
   findOne(id: number) {

@@ -11,8 +11,9 @@ import { CitizenService } from './citizen.service';
 import { CreateCitizenDto } from './dto/create-citizen.dto';
 import { UpdateCitizenDto } from './dto/update-citizen.dto';
 import { Role as RoleModel, Citizen as CitizenModel } from '@prisma/client';
+import { ApiReturns } from 'src/utils/types/ApiReturns.type';
 
-interface OneCitizen extends Omit<CitizenModel, 'id' | 'password' | 'roleId'> {
+interface Citizen extends Omit<CitizenModel, 'id' | 'password' | 'roleId'> {
   role: Omit<RoleModel, 'id'>;
 }
 
@@ -21,17 +22,19 @@ export class CitizenController {
   constructor(private citizenService: CitizenService) {}
 
   @Post()
-  create(@Body() createCitizenDto: CreateCitizenDto) {
+  create(
+    @Body() createCitizenDto: CreateCitizenDto,
+  ): Promise<ApiReturns<Citizen | null>> {
     return this.citizenService.create(createCitizenDto);
   }
 
   @Get()
-  findAll(): Promise<OneCitizen[]> {
+  findAll(): Promise<ApiReturns<Citizen[] | null>> {
     return this.citizenService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<OneCitizen | null> {
+  findOne(@Param('id') id: string): Promise<ApiReturns<Citizen | null>> {
     return this.citizenService.findOne(id);
   }
 
@@ -39,7 +42,7 @@ export class CitizenController {
   update(
     @Param('id') id: string,
     @Body() updateCitizenDto: UpdateCitizenDto,
-  ): Promise<String> {
+  ): Promise<ApiReturns<Citizen>> {
     return this.citizenService.update(id, updateCitizenDto);
   }
 

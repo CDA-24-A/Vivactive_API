@@ -10,14 +10,12 @@ export class CitizenService {
     return this.prisma.citizen.create({ data: createCitizenDto });
   }
 
-  findAll() {
-    return this.prisma.citizen.findMany({
+  async findAll() {
+    return await this.prisma.citizen.findMany({
       select: {
-        id: true,
         email: true,
         name: true,
         surname: true,
-        password: true,
         role: {
           select: { name: true },
         },
@@ -25,15 +23,30 @@ export class CitizenService {
     });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} citizen`;
+  async findOne(id: string) {
+    return this.prisma.citizen.findUnique({
+      where: { id: id },
+      select: {
+        email: true,
+        name: true,
+        surname: true,
+        role: {
+          select: { name: true },
+        },
+      },
+    });
   }
 
-  update(id: number, updateCitizenDto: UpdateCitizenDto) {
-    return `This action updates a #${id} citizen`;
+  async update(id: string, updateCitizenDto: UpdateCitizenDto) {
+    await this.prisma.citizen.update({
+      data: updateCitizenDto,
+      where: { id: id },
+    });
+    return 'Votre profil a bien été mis à jour';
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} citizen`;
+  async remove(id: string) {
+    await this.prisma.citizen.delete({ where: { id: id } });
+    return 'Citoyen Supprimer avec succès';
   }
 }

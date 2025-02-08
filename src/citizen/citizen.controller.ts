@@ -47,7 +47,7 @@ export class CitizenController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string): Promise<String> {
+  remove(@Param('id') id: string): Promise<String | { message: string }> {
     return this.citizenService.remove(id);
   }
 }

@@ -70,7 +70,12 @@ export class CitizenService {
     }
   }
 
-  async findAll(page: number = 1, pageSize: number = 50) {
+  async findAll(
+    page: number = 1,
+    pageSize: number = 50,
+    orderBy: string = 'createdAt',
+    sortBy: string = 'desc',
+  ) {
     try {
       if (page <= 0 || pageSize <= 0) {
         throw new BadRequestException(
@@ -78,8 +83,26 @@ export class CitizenService {
         );
       }
 
+      if (sortBy !== 'asc' && sortBy !== 'desc') {
+        throw new BadRequestException(
+          'Le paramètre "sort" doit être "asc" ou "desc"',
+        );
+      }
+
       if (pageSize > 100) {
         throw new BadRequestException('Nombre de retour maximum dépassé');
+      }
+
+      const validOrderByFields = [
+        'email',
+        'name',
+        'surname',
+        'createdAt',
+        'updatedAt',
+      ];
+
+      if (!validOrderByFields.includes(orderBy)) {
+        throw new BadRequestException('Le paramètre "orderBy" est invalide.');
       }
 
       const skip = (page - 1) * pageSize;
@@ -88,6 +111,9 @@ export class CitizenService {
       const citizens = await this.prisma.citizen.findMany({
         skip,
         take,
+        orderBy: {
+          [orderBy]: sortBy,
+        },
         select: {
           email: true,
           name: true,

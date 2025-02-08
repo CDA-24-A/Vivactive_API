@@ -30,13 +30,20 @@ export class CitizenController {
   findAll(
     @Query('page') page: string = '1',
     @Query('perPage') perPage: string = '10',
+    @Query('orderBy') orderBy: string,
+    @Query('sortBy') sortBy: 'asc' | 'desc' = 'asc',
   ): Promise<ApiReturns<CitizenType[] | null>> {
     const { page: pageNumber, perPage: perPageNumber } = validatePagination(
       page,
       perPage,
     );
 
-    return this.citizenService.findAll(pageNumber, perPageNumber);
+    return this.citizenService.findAll(
+      pageNumber,
+      perPageNumber,
+      orderBy,
+      sortBy,
+    );
   }
 
   @Get(':id')

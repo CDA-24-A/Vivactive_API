@@ -63,6 +63,7 @@ export class CitizenService {
           'Une erreur de validation est survenue (données dupliquées)',
         );
       }
+      console.error(error);
       throw new InternalServerErrorException(
         'Une erreur inconnue est survenue',
       );
@@ -113,6 +114,7 @@ export class CitizenService {
       if (error instanceof NotFoundException) {
         throw error;
       }
+      console.error(error);
       throw new InternalServerErrorException(
         'Une erreur inconnue est survenue',
       );
@@ -142,6 +144,7 @@ export class CitizenService {
       if (error instanceof NotFoundException) {
         throw error;
       }
+      console.error(error);
       throw new InternalServerErrorException(
         'Une erreur inconnue est survenue',
       );
@@ -150,11 +153,14 @@ export class CitizenService {
 
   async update(id: string, updateCitizenDto: UpdateCitizenDto) {
     try {
-      const hashedPassword = await this.hashingPassword(
-        updateCitizenDto.password,
-      );
+      let citizenData = updateCitizenDto;
 
-      const citizenData = { ...updateCitizenDto, password: hashedPassword };
+      if (updateCitizenDto.password) {
+        const hashedPassword = await this.hashingPassword(
+          updateCitizenDto.password,
+        );
+        citizenData.password = hashedPassword;
+      }
 
       const citizen = await this.prisma.citizen.update({
         data: citizenData,
@@ -181,6 +187,7 @@ export class CitizenService {
       if (error.code === 'P2002') {
         throw new BadRequestException('Contrainte violée : donnée dupliquée');
       }
+      console.error(error);
       throw new InternalServerErrorException(
         'Une erreur inconnue est survenue',
       );

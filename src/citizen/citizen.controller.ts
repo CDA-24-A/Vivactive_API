@@ -11,13 +11,9 @@ import {
 import { CitizenService } from './citizen.service';
 import { CreateCitizenDto } from './dto/create-citizen.dto';
 import { UpdateCitizenDto } from './dto/update-citizen.dto';
-import { Role as RoleModel, Citizen as CitizenModel } from '@prisma/client';
 import { ApiReturns } from 'src/utils/types/ApiReturns.type';
 import { validatePagination } from 'src/utils/pageQueryhandeler';
-
-interface Citizen extends Omit<CitizenModel, 'id' | 'password' | 'roleId'> {
-  role: Omit<RoleModel, 'id'>;
-}
+import { CitizenType } from 'src/utils/types/PrismaApiModel.type';
 
 @Controller('citizen')
 export class CitizenController {
@@ -26,7 +22,7 @@ export class CitizenController {
   @Post()
   create(
     @Body() createCitizenDto: CreateCitizenDto,
-  ): Promise<ApiReturns<Citizen | null>> {
+  ): Promise<ApiReturns<CitizenType | null>> {
     return this.citizenService.create(createCitizenDto);
   }
 
@@ -34,7 +30,7 @@ export class CitizenController {
   findAll(
     @Query('page') page: string = '1',
     @Query('perPage') perPage: string = '10',
-  ): Promise<ApiReturns<Citizen[] | null>> {
+  ): Promise<ApiReturns<CitizenType[] | null>> {
     const { page: pageNumber, perPage: perPageNumber } = validatePagination(
       page,
       perPage,
@@ -44,7 +40,7 @@ export class CitizenController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<ApiReturns<Citizen | null>> {
+  findOne(@Param('id') id: string): Promise<ApiReturns<CitizenType | null>> {
     return this.citizenService.findOne(id);
   }
 
@@ -52,7 +48,7 @@ export class CitizenController {
   update(
     @Param('id') id: string,
     @Body() updateCitizenDto: UpdateCitizenDto,
-  ): Promise<ApiReturns<Citizen>> {
+  ): Promise<ApiReturns<CitizenType>> {
     return this.citizenService.update(id, updateCitizenDto);
   }
 

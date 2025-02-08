@@ -1,6 +1,8 @@
 import { PrismaClient } from '@prisma/client';
+import { createCitizen } from './data/citizen';
 
 const prisma = new PrismaClient();
+
 async function main() {
   const admin = await prisma.role.upsert({
     where: { name: 'ADMIN' },
@@ -16,7 +18,17 @@ async function main() {
       name: 'MODERATOR',
     },
   });
+
+  const user = await prisma.role.upsert({
+    where: { name: 'USER' },
+    update: {},
+    create: {
+      name: 'USER',
+    },
+  });
   console.log({ admin, moderator });
+
+  createCitizen([admin, moderator, user]);
 }
 main()
   .then(async () => {

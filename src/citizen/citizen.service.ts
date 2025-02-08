@@ -8,15 +8,27 @@ import {
 import { CreateCitizenDto } from './dto/create-citizen.dto';
 import { UpdateCitizenDto } from './dto/update-citizen.dto';
 import { PrismaService } from 'src/prisma.service';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class CitizenService {
   constructor(private prisma: PrismaService) {}
+  private readonly saltRounds = 10;
+
+  private async hashingPassword(password: string): Promise<string> {
+    return bcrypt.hash(password, this.saltRounds);
+  }
 
   async create(createCitizenDto: CreateCitizenDto) {
     try {
+      const hashedPassword = await this.hashingPassword(
+        createCitizenDto.password,
+      );
+
+      const citizenData = { ...createCitizenDto, password: hashedPassword };
+
       const citizen = await this.prisma.citizen.create({
-        data: createCitizenDto,
+        data: citizenData,
         select: {
           email: true,
           name: true,
@@ -108,8 +120,14 @@ export class CitizenService {
 
   async update(id: string, updateCitizenDto: UpdateCitizenDto) {
     try {
+      const hashedPassword = await this.hashingPassword(
+        updateCitizenDto.password,
+      );
+
+      const citizenData = { ...updateCitizenDto, password: hashedPassword };
+
       const citizen = await this.prisma.citizen.update({
-        data: updateCitizenDto,
+        data: citizenData,
         where: { id: id },
         select: {
           email: true,

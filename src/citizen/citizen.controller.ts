@@ -6,12 +6,14 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { CitizenService } from './citizen.service';
 import { CreateCitizenDto } from './dto/create-citizen.dto';
 import { UpdateCitizenDto } from './dto/update-citizen.dto';
 import { Role as RoleModel, Citizen as CitizenModel } from '@prisma/client';
 import { ApiReturns } from 'src/utils/types/ApiReturns.type';
+import { validatePagination } from 'src/utils/pageQueryhandeler';
 
 interface Citizen extends Omit<CitizenModel, 'id' | 'password' | 'roleId'> {
   role: Omit<RoleModel, 'id'>;
@@ -29,8 +31,16 @@ export class CitizenController {
   }
 
   @Get()
-  findAll(): Promise<ApiReturns<Citizen[] | null>> {
-    return this.citizenService.findAll();
+  findAll(
+    @Query('page') page: string = '1',
+    @Query('perPage') perPage: string = '10',
+  ): Promise<ApiReturns<Citizen[] | null>> {
+    const { page: pageNumber, perPage: perPageNumber } = validatePagination(
+      page,
+      perPage,
+    );
+
+    return this.citizenService.findAll(pageNumber, perPageNumber);
   }
 
   @Get(':id')

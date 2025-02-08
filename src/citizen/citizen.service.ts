@@ -19,6 +19,14 @@ export class CitizenService {
     return bcrypt.hash(password, this.saltRounds);
   }
 
+  // A mettre avec le auth
+  // async validatePassword(
+  //   plainPassword: string,
+  //   hashedPassword: string,
+  // ): Promise<boolean> {
+  //   return bcrypt.compare(plainPassword, hashedPassword);
+  // }
+
   async create(createCitizenDto: CreateCitizenDto) {
     try {
       const hashedPassword = await this.hashingPassword(
@@ -61,9 +69,24 @@ export class CitizenService {
     }
   }
 
-  async findAll() {
+  async findAll(page: number = 1, pageSize: number = 50) {
     try {
+      if (page <= 0 || pageSize <= 0) {
+        throw new BadRequestException(
+          'Les paramètres page et pageSize doivent être supérieurs à 0',
+        );
+      }
+
+      if (pageSize > 100) {
+        throw new BadRequestException('Nombre de retour maximum dépassé');
+      }
+
+      const skip = (page - 1) * pageSize;
+      const take = pageSize;
+
       const citizens = await this.prisma.citizen.findMany({
+        skip,
+        take,
         select: {
           email: true,
           name: true,
@@ -77,8 +100,15 @@ export class CitizenService {
       if (!citizens || citizens.length === 0) {
         throw new NotFoundException('Aucun citoyen trouvé');
       }
+      const totalCitizens = await this.prisma.citizen.count();
 
-      return { data: citizens, message: 'Citoyens récupérés avec succès' };
+      return {
+        data: citizens,
+        total: totalCitizens,
+        page,
+        pageSize,
+        message: 'Citoyens récupérés avec succès',
+      };
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw error;

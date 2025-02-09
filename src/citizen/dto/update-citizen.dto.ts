@@ -1,5 +1,3 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateCitizenDto } from './create-citizen.dto';
 import { IsNotEmpty, IsOptional } from 'class-validator';
 
 export class UpdateCitizenDto {

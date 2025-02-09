@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import {
   Injectable,
   NotFoundException,
@@ -179,7 +180,7 @@ export class CitizenService {
 
   async update(id: string, updateCitizenDto: UpdateCitizenDto) {
     try {
-      let citizenData = updateCitizenDto;
+      const citizenData = updateCitizenDto;
 
       if (updateCitizenDto.password) {
         const hashedPassword = await this.hashingPassword(

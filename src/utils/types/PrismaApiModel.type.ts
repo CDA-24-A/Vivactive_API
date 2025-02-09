@@ -8,5 +8,4 @@ export interface CitizenType
   role: Omit<RoleModel, 'id' | 'createdAt' | 'updatedAt'>;
 }
 
-export interface RoleType
-  extends Omit<RoleModel, 'id' | 'createdAt' | 'updatedAt'> {}
+export type RoleType = Omit<RoleModel, 'id' | 'createdAt' | 'updatedAt'>;

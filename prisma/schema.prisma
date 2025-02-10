@@ -22,10 +22,9 @@ model Citizen {
   password String
   role Role @relation(fields: [roleId], references: [id])
   roleId String
-  comment Comment @relation(fields: [commentId], references: [id])
-  commentId String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
+  Comment Comment[]
 }
 
 model Role {
@@ -40,7 +39,8 @@ model Comment {
   id  String  @id @default(uuid())
   title String
   description String
-  citizen Citizen[]
+  citizen Citizen @relation(fields: [citizenId], references: [id])
+  citizenId String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
 }

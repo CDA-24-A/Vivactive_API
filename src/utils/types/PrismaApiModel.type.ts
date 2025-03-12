@@ -1,4 +1,4 @@
-import { Role as RoleModel, Citizen as CitizenModel } from '@prisma/client';
+import { Role as RoleModel, Citizen as CitizenModel, Comment as CommentModel } from '@prisma/client';
 
 export interface CitizenType
   extends Omit<
@@ -10,3 +10,7 @@ export interface CitizenType
 
 export interface RoleType
   extends Omit<RoleModel, 'id' | 'createdAt' | 'updatedAt'> {}
+
+  export interface CommentType extends Omit<CommentModel,'id' | 'citizenId' | 'updatedAt'> {
+    citizen: Omit<CitizenType, 'role' | 'createdAt' | 'updatedAt' | 'password' | 'roleId' | 'email' | 'id' | 'roleId' | 'Comment'>;
+  } 

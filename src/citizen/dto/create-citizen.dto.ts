@@ -1,18 +1,37 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsInt, IsBoolean, IsDateString } from 'class-validator';
 
 export class CreateCitizenDto {
   @IsNotEmpty()
-  name: string;
+  title: string;
 
   @IsNotEmpty()
-  surname: string;
+  description: string;
 
-  @IsNotEmpty()
-  email: string;
+  @IsOptional()
+  @IsInt()
+  maxParticipant?: number;
 
-  @IsNotEmpty()
-  password: string;
+  @IsOptional()
+  @IsInt()
+  nbParticipant?: number;
 
-  @IsNotEmpty()
-  roleId: string;
+  @IsOptional()
+  @IsDateString()
+  deadLine?: Date;
+
+  @IsOptional()
+  categoryId: string;
+
+  @IsOptional()
+  fileId?: string;
+
+  @IsOptional()
+  bannerId?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  isValidate: boolean;
+
+  @IsOptional()
+  status: string;
 }

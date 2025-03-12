@@ -42,8 +42,8 @@ model Resource {
   maxParticipant Int?     
   nbParticipant  Int?     
   deadLine       DateTime?
-  category       Category @relation(fields: [categoryId], references: [id])
-  categoryId     String
+  category       Category? @relation(fields: [categoryId], references: [id])
+  categoryId     String?
   file           File?    @relation(fields: [fileId], references: [id])
   fileId         String?
   banner         Image?   @relation(fields: [bannerId], references: [id])

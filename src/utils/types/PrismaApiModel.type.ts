@@ -1,11 +1,13 @@
-import { Role as RoleModel, Citizen as CitizenModel } from '@prisma/client';
+import { File as FileModel, Resource as ResourceModel } from '@prisma/client';
 
 export interface CitizenType
   extends Omit<
-    CitizenModel,
-    'id' | 'password' | 'roleId' | 'createdAt' | 'updatedAt'
+    ResourceModel,
+    'id' | 'category' | 'categoryId' | 'createdAt' | 'updatedAt'  | 'fileId' | 'banner' | 'bannerId' | 'file'
   > {
-  role: Omit<RoleModel, 'id' | 'createdAt' | 'updatedAt'>;
+  file?: Omit<FileModel, 'id' | 'resources'> | null;
 }
 
-export type RoleType = Omit<RoleModel, 'id' | 'createdAt' | 'updatedAt'>;
+export type FileType = Omit<FileModel, 'id' | 'resources'>;
+
+

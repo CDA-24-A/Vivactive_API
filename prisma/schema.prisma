@@ -35,7 +35,7 @@ model Role {
 }
 
 
-model Resource {
+model Ressource {
   id             String   @id @default(uuid())
   title          String
   description    String

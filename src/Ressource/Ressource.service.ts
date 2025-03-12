@@ -6,55 +6,39 @@ import {
   ForbiddenException,
   BadRequestException,
 } from '@nestjs/common';
-import { CreateCitizenDto } from './dto/create-citizen.dto';
-import { UpdateCitizenDto } from './dto/update-citizen.dto';
+import { CreateRessourceDto } from './dto/create-Ressource.dto';
+import { UpdateRessourceDto } from './dto/update-Ressource.dto';
 import { PrismaService } from 'src/prisma.service';
-import * as bcrypt from 'bcrypt';
 
 @Injectable()
-export class CitizenService {
+export class RessourceService {
   constructor(private prisma: PrismaService) {}
-  private readonly saltRounds = 10;
 
-  private async hashingPassword(password: string): Promise<string> {
-    return bcrypt.hash(password, this.saltRounds);
-  }
-
-  // A mettre avec le auth
-  // async validatePassword(
-  //   plainPassword: string,
-  //   hashedPassword: string,
-  // ): Promise<boolean> {
-  //   return bcrypt.compare(plainPassword, hashedPassword);
-  // }
-
-  async create(createCitizenDto: CreateCitizenDto) {
+  async create(createRessourceDto: CreateRessourceDto) {
     try {
-      const hashedPassword = await this.hashingPassword(
-        createCitizenDto.password,
-      );
-
-      const citizenData = { ...createCitizenDto, password: hashedPassword };
-
-      const citizen = await this.prisma.citizen.create({
-        data: citizenData,
+      const Ressource = await this.prisma.resource.create({
+        data: createRessourceDto,
         select: {
-          email: true,
-          name: true,
-          surname: true,
-          role: {
-            select: { name: true },
+          title: true,
+          description: true,
+          maxParticipant: true,
+          nbParticipant: true,
+          deadLine: true,
+          isValidate: true,
+          status: true,
+          file: {
+            select: { path: true },
           },
         },
       });
 
-      if (!citizen) {
+      if (!Ressource) {
         throw new InternalServerErrorException(
-          `Une erreur est survenue lors de la création du citoyen`,
+          `Une erreur est survenue lors de la création de la Ressources`,
         );
       }
 
-      return { data: citizen, message: 'Citoyen créé avec succès' };
+      return { data: Ressource, message: 'Ressources créé avec succès' };
     } catch (error) {
       if (error instanceof InternalServerErrorException) {
         throw error;
@@ -109,33 +93,37 @@ export class CitizenService {
       const skip = (page - 1) * pageSize;
       const take = pageSize;
 
-      const citizens = await this.prisma.citizen.findMany({
+      const Ressources = await this.prisma.resource.findMany({
         skip,
         take,
         orderBy: {
           [orderBy]: sortBy,
         },
         select: {
-          email: true,
-          name: true,
-          surname: true,
-          role: {
-            select: { name: true },
+          title: true,
+          description: true,
+          maxParticipant: true,
+          nbParticipant: true,
+          deadLine: true,
+          isValidate: true,
+          status: true,
+          file: {
+            select: { path: true },
           },
         },
       });
 
-      if (!citizens || citizens.length === 0) {
-        throw new NotFoundException('Aucun citoyen trouvé');
+      if (!Ressources || Ressources.length === 0) {
+        throw new NotFoundException('Aucune Ressources trouvé');
       }
-      const totalCitizens = await this.prisma.citizen.count();
+      const totalRessources = await this.prisma.resource.count();
 
       return {
-        data: citizens,
-        total: totalCitizens,
+        data: Ressources,
+        total: totalRessources,
         page,
         pageSize,
-        message: 'Citoyens récupérés avec succès',
+        message: 'Ressources récupérés avec succès',
       };
     } catch (error) {
       if (error instanceof NotFoundException) {
@@ -150,23 +138,27 @@ export class CitizenService {
 
   async findOne(id: string) {
     try {
-      const citizen = await this.prisma.citizen.findUnique({
+      const Ressource = await this.prisma.resource.findUnique({
         where: { id: id },
         select: {
-          email: true,
-          name: true,
-          surname: true,
-          role: {
-            select: { name: true },
+          title: true,
+          description: true,
+          maxParticipant: true,
+          nbParticipant: true,
+          deadLine: true,
+          isValidate: true,
+          status: true,
+          file: {
+            select: { path: true },
           },
         },
       });
 
-      if (!citizen) {
-        throw new NotFoundException('Citoyen non trouvé');
+      if (!Ressource) {
+        throw new NotFoundException('Ressources non trouvé');
       }
 
-      return { data: citizen, message: 'Citoyen récupéré avec succès' };
+      return { data: Ressource, message: 'Ressources récupéré avec succès' };
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw error;
@@ -178,35 +170,30 @@ export class CitizenService {
     }
   }
 
-  async update(id: string, updateCitizenDto: UpdateCitizenDto) {
+  async update(id: string, updateRessourceDto: UpdateRessourceDto) {
     try {
-      const citizenData = updateCitizenDto;
-
-      if (updateCitizenDto.password) {
-        const hashedPassword = await this.hashingPassword(
-          updateCitizenDto.password,
-        );
-        citizenData.password = hashedPassword;
-      }
-
-      const citizen = await this.prisma.citizen.update({
-        data: citizenData,
+      const Ressource = await this.prisma.resource.update({
+        data: updateRessourceDto,
         where: { id: id },
         select: {
-          email: true,
-          name: true,
-          surname: true,
-          role: {
-            select: { name: true },
+          title: true,
+          description: true,
+          maxParticipant: true,
+          nbParticipant: true,
+          deadLine: true,
+          isValidate: true,
+          status: true,
+          file: {
+            select: { path: true },
           },
         },
       });
 
-      if (!citizen) {
-        throw new NotFoundException('Citoyen non trouvé pour la mise à jour');
+      if (!Ressource) {
+        throw new NotFoundException('Ressources non trouvé pour la mise à jour');
       }
 
-      return { data: citizen, message: 'Citoyen mis à jour avec succès' };
+      return { data: Ressource, message: 'Ressources mis à jour avec succès' };
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw error;
@@ -223,22 +210,22 @@ export class CitizenService {
 
   async remove(id: string) {
     try {
-      const citizen = await this.prisma.citizen.findUnique({
+      const Ressource = await this.prisma.resource.findUnique({
         where: { id: id },
       });
-      if (!citizen) {
-        throw new NotFoundException('Citoyen non trouvé');
+      if (!Ressource) {
+        throw new NotFoundException('Ressources non trouvé');
       }
 
-      await this.prisma.citizen.delete({ where: { id: id } });
-      return { message: 'Citoyen supprimé avec succès' };
+      await this.prisma.resource.delete({ where: { id: id } });
+      return { message: 'Ressources supprimé avec succès' };
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw error;
       }
       if (error.code === 'P2003') {
         throw new ForbiddenException(
-          'Impossible de supprimer ce citoyen : contrainte de dépendance',
+          'Impossible de supprimer cette Ressources : contrainte de dépendance',
         );
       }
       throw new InternalServerErrorException(

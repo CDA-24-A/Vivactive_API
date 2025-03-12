@@ -1,41 +1,23 @@
-import { IsNotEmpty, IsOptional, IsInt, IsBoolean, IsDateString } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 
 export class UpdateCitizenDto {
-  @IsOptional()
   @IsNotEmpty()
-  title?: string;
-
   @IsOptional()
+  name: string;
+
   @IsNotEmpty()
-  description?: string;
-
   @IsOptional()
-  @IsInt()
-  maxParticipant?: number;
+  surname: string;
 
-  @IsOptional()
-  @IsInt()
-  nbParticipant?: number;
-
-  @IsOptional()
-  @IsDateString()
-  deadLine?: Date;
-
-  @IsOptional()
   @IsNotEmpty()
-  categoryId?: string;
-
   @IsOptional()
-  fileId?: string;
+  email: string;
 
-  @IsOptional()
-  bannerId?: string;
-
-  @IsOptional()
-  @IsBoolean()
-  isValidate?: boolean;
-
-  @IsOptional()
   @IsNotEmpty()
-  status?: string;
+  @IsOptional()
+  password: string;
+
+  @IsNotEmpty()
+  @IsOptional()
+  roleId: string;
 }

@@ -47,20 +47,80 @@ export class CommentService {
         }
   }
 
-  findAll() {
-    return `This action returns all comment`;
+  async findAll(citizenId: string | undefined) {
+    try {
+      const comments = await this.prisma.comment.findMany({
+        where: { citizenId: citizenId },
+        select: {
+          title: true,
+          description: true,
+          createdAt: true,
+          citizen: {
+            select: {
+              name: true,
+              surname: true,
+            },
+          }
+        },
+      });
+
+      if (!comments || comments.length === 0) {
+        throw new NotFoundException('Aucun commentaire trouvé');
+      }
+      const totalComments = await this.prisma.comment.count();
+
+      return {
+        data: comments,
+        total: totalComments,
+        message: 'Commentaires récupérés avec succès',
+      };
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      console.error(error);
+      throw new InternalServerErrorException(
+        'Une erreur inconnue est survenue',
+      );
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} comment`;
+  async findOne(id: string) {
+    try {
+      const comment = await this.prisma.comment.findUnique({
+        where: { id: id },
+        select: {
+          title: true,
+          description: true,
+          createdAt: true,
+          citizen: {
+            select: {
+              name: true,
+              surname: true,
+            },
+          }
+        },
+      });
+
+      if (!comment) {
+        throw new NotFoundException('Commentaire non trouvé');
+      }
+
+      return { data: comment, message: 'Commentaire récupéré avec succès' };
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      console.error(error);
+      throw new InternalServerErrorException(
+        'Une erreur inconnue est survenue',
+      );
+    }
   }
 
   async update(id: string, updateCommentDto: UpdateCommentDto) {
     try {
 
-          console.log(updateCommentDto, id);
-          
-    
           const comment = await this.prisma.comment.update({
             data: updateCommentDto,
             where: { id: id },

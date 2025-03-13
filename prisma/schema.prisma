@@ -45,10 +45,8 @@ model Ressource {
   deadLine       DateTime?
   category       Category @relation(fields: [categoryId], references: [id])
   categoryId     String
-  file           File?    @relation(fields: [fileId], references: [id])
-  fileId         String?
-  banner         Image?   @relation(fields: [bannerId], references: [id])
-  bannerId       String?
+  file           String?
+  banner         String?
   isValidate     Boolean
   status         String
   createdAt      DateTime @default(now())
@@ -62,18 +60,6 @@ model Category {
   Ressource Ressource[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
-}
-
-model File {
-  id        String    @id @default(uuid())
-  path      String
-  ressources Ressource[]
-}
-
-model Image {
-  id        String    @id @default(uuid())
-  url       String
-  ressources Ressource[]
 }
 
 model Comment {

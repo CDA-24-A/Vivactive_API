@@ -26,15 +26,11 @@ export class RessourceService {
           deadLine: true,
           isValidate: true,
           status: true,
-          file: {
-            select: { path: true },
-          },
+          file: true,
           category: {
             select: { name: true },
           },
-          banner: { 
-            select: { url: true },
-          },
+          banner: true,
         },
       });
 
@@ -113,8 +109,10 @@ export class RessourceService {
           deadLine: true,
           isValidate: true,
           status: true,
-          file: {
-            select: { path: true },
+          file: true,
+          banner: true,
+          category: {
+            select: { name: true },
           },
         },
       });
@@ -154,8 +152,10 @@ export class RessourceService {
           deadLine: true,
           isValidate: true,
           status: true,
-          file: {
-            select: { path: true },
+          file: true,
+          banner: true,
+          category: {
+            select: { name: true },
           },
         },
       });
@@ -189,8 +189,10 @@ export class RessourceService {
           deadLine: true,
           isValidate: true,
           status: true,
-          file: {
-            select: { path: true },
+          file: true,
+          banner: true,
+          category: {
+            select: { name: true },
           },
         },
       });

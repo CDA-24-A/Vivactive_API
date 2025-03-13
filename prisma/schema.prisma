@@ -42,8 +42,8 @@ model Ressource {
   maxParticipant Int?     
   nbParticipant  Int?     
   deadLine       DateTime?
-  category       Category? @relation(fields: [categoryId], references: [id])
-  categoryId     String?
+  category       Category @relation(fields: [categoryId], references: [id])
+  categoryId     String
   file           File?    @relation(fields: [fileId], references: [id])
   fileId         String?
   banner         Image?   @relation(fields: [bannerId], references: [id])
@@ -58,7 +58,7 @@ model Category {
   id  String  @id @default(uuid())
   name String @unique
   description String @unique
-  Resource Resource[]
+  Ressource Ressource[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
 }
@@ -66,11 +66,11 @@ model Category {
 model File {
   id        String    @id @default(uuid())
   path      String
-  resources Resource[]
+  ressources Ressource[]
 }
 
 model Image {
   id        String    @id @default(uuid())
   url       String
-  resources Resource[]
+  ressources Ressource[]
 }

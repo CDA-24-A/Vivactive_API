@@ -16,7 +16,7 @@ export class RessourceService {
 
   async create(createRessourceDto: CreateRessourceDto) {
     try {
-      const Ressource = await this.prisma.resource.create({
+      const Ressource = await this.prisma.ressource.create({
         data: createRessourceDto,
         select: {
           title: true,
@@ -28,6 +28,12 @@ export class RessourceService {
           status: true,
           file: {
             select: { path: true },
+          },
+          category: {
+            select: { name: true },
+          },
+          banner: { 
+            select: { url: true },
           },
         },
       });
@@ -93,7 +99,7 @@ export class RessourceService {
       const skip = (page - 1) * pageSize;
       const take = pageSize;
 
-      const Ressources = await this.prisma.resource.findMany({
+      const Ressources = await this.prisma.ressource.findMany({
         skip,
         take,
         orderBy: {
@@ -116,7 +122,7 @@ export class RessourceService {
       if (!Ressources || Ressources.length === 0) {
         throw new NotFoundException('Aucune Ressources trouvé');
       }
-      const totalRessources = await this.prisma.resource.count();
+      const totalRessources = await this.prisma.ressource.count();
 
       return {
         data: Ressources,
@@ -138,7 +144,7 @@ export class RessourceService {
 
   async findOne(id: string) {
     try {
-      const Ressource = await this.prisma.resource.findUnique({
+      const Ressource = await this.prisma.ressource.findUnique({
         where: { id: id },
         select: {
           title: true,
@@ -172,7 +178,7 @@ export class RessourceService {
 
   async update(id: string, updateRessourceDto: UpdateRessourceDto) {
     try {
-      const Ressource = await this.prisma.resource.update({
+      const Ressource = await this.prisma.ressource.update({
         data: updateRessourceDto,
         where: { id: id },
         select: {
@@ -210,14 +216,14 @@ export class RessourceService {
 
   async remove(id: string) {
     try {
-      const Ressource = await this.prisma.resource.findUnique({
+      const Ressource = await this.prisma.ressource.findUnique({
         where: { id: id },
       });
       if (!Ressource) {
         throw new NotFoundException('Ressources non trouvé');
       }
 
-      await this.prisma.resource.delete({ where: { id: id } });
+      await this.prisma.ressource.delete({ where: { id: id } });
       return { message: 'Ressources supprimé avec succès' };
     } catch (error) {
       if (error instanceof NotFoundException) {

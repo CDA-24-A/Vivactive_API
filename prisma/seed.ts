@@ -26,7 +26,6 @@ async function main() {
       name: 'USER',
     },
   });
-  console.log({ admin, moderator });
 
   void createCitizen([admin, moderator, user]);
 }

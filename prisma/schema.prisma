@@ -24,12 +24,23 @@ model Citizen {
   roleId String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
+  Comment Comment[]
 }
 
 model Role {
   id  String  @id @default(uuid())
   name String @unique
   citizen Citizen[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+}
+
+model Comment {
+  id  String  @id @default(uuid())
+  title String
+  description String
+  citizen Citizen @relation(fields: [citizenId], references: [id])
+  citizenId String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
 }

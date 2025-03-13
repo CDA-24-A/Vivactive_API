@@ -30,5 +30,4 @@ export async function createCitizen(roles: RoleModel[]) {
       },
     });
   }
-  console.log('10 utilisateurs ont été créés avec succès');
 }

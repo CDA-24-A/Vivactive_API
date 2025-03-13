@@ -35,6 +35,47 @@ model Role {
   updatedAt DateTime @updatedAt @default(now())
 }
 
+
+model Ressource {
+  id             String   @id @default(uuid())
+  title          String
+  description    String
+  maxParticipant Int?     
+  nbParticipant  Int?     
+  deadLine       DateTime?
+  category       Category @relation(fields: [categoryId], references: [id])
+  categoryId     String
+  file           File?    @relation(fields: [fileId], references: [id])
+  fileId         String?
+  banner         Image?   @relation(fields: [bannerId], references: [id])
+  bannerId       String?
+  isValidate     Boolean
+  status         String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Category {
+  id  String  @id @default(uuid())
+  name String @unique
+  description String @unique
+  Ressource Ressource[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+}
+
+model File {
+  id        String    @id @default(uuid())
+  path      String
+  ressources Ressource[]
+}
+
+model Image {
+  id        String    @id @default(uuid())
+  url       String
+  ressources Ressource[]
+}
+
 model Comment {
   id  String  @id @default(uuid())
   title String

@@ -59,7 +59,7 @@ model Category {
   id  String  @id @default(uuid())
   name String @unique
   description String @unique
-  Ressource Ressource[]
+  ressources Ressource[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
 }

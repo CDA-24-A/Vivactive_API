@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import {
   Injectable,
@@ -9,11 +10,15 @@ import {
 import { CreateCitizenDto } from './dto/create-citizen.dto';
 import { UpdateCitizenDto } from './dto/update-citizen.dto';
 import { PrismaService } from 'src/prisma.service';
+import { ClerkService } from 'src/auth/clerk.service';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class CitizenService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private clerkService: ClerkService,
+  ) {}
   private readonly saltRounds = 10;
 
   private async hashingPassword(password: string): Promise<string> {
@@ -34,7 +39,13 @@ export class CitizenService {
         createCitizenDto.password,
       );
 
-      const citizenData = { ...createCitizenDto, password: hashedPassword };
+      const clerkUser = await this.clerkService.getClerkUser(createCitizenDto);
+
+      const citizenData = {
+        ...createCitizenDto,
+        password: hashedPassword,
+        clerkId: clerkUser.id,
+      };
 
       const citizen = await this.prisma.citizen.create({
         data: citizenData,
@@ -182,6 +193,11 @@ export class CitizenService {
     try {
       const citizenData = updateCitizenDto;
 
+      await this.clerkService.updateClerkUser(
+        citizenData.clerkId,
+        updateCitizenDto,
+      );
+
       if (updateCitizenDto.password) {
         const hashedPassword = await this.hashingPassword(
           updateCitizenDto.password,
@@ -230,7 +246,10 @@ export class CitizenService {
         throw new NotFoundException('Citoyen non trouvé');
       }
 
+      await this.clerkService.deleteClerkUser(citizen.clerkId);
+
       await this.prisma.citizen.delete({ where: { id: id } });
+
       return { message: 'Citoyen supprimé avec succès' };
     } catch (error) {
       if (error instanceof NotFoundException) {

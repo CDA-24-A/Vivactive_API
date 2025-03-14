@@ -27,6 +27,7 @@ export async function createCitizen(roles: RoleModel[]) {
         surname: faker.person.lastName(),
         password: await bcrypt.hash(faker.internet.password(), 10),
         roleId: switchRole(roles),
+        clerkId: 'fakeId',
       },
     });
   }

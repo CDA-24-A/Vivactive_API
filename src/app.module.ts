@@ -10,5 +10,4 @@ import { CitizenModule } from './citizen/citizen.module';
   controllers: [AppController],
   providers: [AppService],
 })
-
 export class AppModule {}

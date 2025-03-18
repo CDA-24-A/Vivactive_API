@@ -32,6 +32,7 @@ export default tseslint.config(
       '@typescript-eslint/no-unsafe-argument': 'warn',
       '@typescript-eslint/no-empty-object-type': 'warn',
       '@typescript-eslint/no-unsafe-member-access': 'warn',
+      '@typescript-eslint/no-unused-vars': 'warn',
     },
   },
 );

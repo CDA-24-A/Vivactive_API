@@ -32,7 +32,7 @@ export class RessourceController {
     @Query('perPage') perPage: string = '10',
     @Query('orderBy') orderBy: string,
     @Query('sortBy') sortBy: 'asc' | 'desc' = 'asc',
-  ): Promise<ApiReturns<RessourceType[] | null>> {
+  ): Promise<ApiReturns<Array<Omit<RessourceType, 'step'>> | null>> {
     const { page: pageNumber, perPage: perPageNumber } = validatePagination(
       page,
       perPage,
@@ -55,7 +55,7 @@ export class RessourceController {
   update(
     @Param('id') id: string,
     @Body() updateRessourceDto: UpdateRessourceDto,
-  ): Promise<ApiReturns<RessourceType>> {
+  ): Promise<ApiReturns<Omit<RessourceType, 'step'>>> {
     return this.RessourceService.update(id, updateRessourceDto);
   }
 

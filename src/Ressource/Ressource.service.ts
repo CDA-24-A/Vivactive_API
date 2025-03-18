@@ -32,8 +32,15 @@ export class RessourceService {
           category: {
             select: { name: true },
           },
-          banner: { 
+          banner: {
             select: { url: true },
+          },
+          step: {
+            select: {
+              title: true,
+              description: true,
+              order: true,
+            },
           },
         },
       });
@@ -157,6 +164,9 @@ export class RessourceService {
           file: {
             select: { path: true },
           },
+          step: {
+            select: { title: true, description: true, order: true },
+          },
         },
       });
 
@@ -196,7 +206,7 @@ export class RessourceService {
       });
 
       if (!Ressource) {
-        throw new NotFoundException('Ressources non trouvé pour la mise à jour');
+        throw new NotFoundException('Ressource non trouvé pour la mise à jour');
       }
 
       return { data: Ressource, message: 'Ressources mis à jour avec succès' };

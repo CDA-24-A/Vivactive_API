@@ -5,6 +5,7 @@ import {
   File as FileModel,
   Ressource as ResourceModel,
   Step as StepModel,
+  Progression as ProgressionModel,
 } from '@prisma/client';
 
 export interface CitizenType
@@ -51,3 +52,5 @@ export interface CommentType
 }
 
 export type StepType = Omit<StepModel, 'id'>;
+
+export type ProgressionType = Omit<ProgressionModel, 'createdAt' | 'updatedAd'>;

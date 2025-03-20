@@ -6,7 +6,7 @@ import {
   Ressource as ResourceModel,
   Step as StepModel,
   Progression as ProgressionModel,
-} from '@prisma/client';
+, Category as CategoryModel} from '@prisma/client';
 
 export interface CitizenType
   extends Omit<

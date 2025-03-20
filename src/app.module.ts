@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { RessourceModule } from './Ressource/Ressource.module';
 import { CommentModule } from './comment/comment.module';
 import { CitizenModule } from './citizen/citizen.module';
+import { CategoryModule } from './category/category.module';
 import { StepModule } from './step/step.module';
 import { ProgressionModule } from './progression/progression.module';
 import { ScheduleModule } from '@nestjs/schedule';
@@ -17,8 +18,8 @@ import { RoleModule } from './role/role.module';
     RoleModule,
     StepModule,
     ProgressionModule,
-    ScheduleModule.forRoot()
-   ],
+    ScheduleModule.forRoot(),
+    CategoryModule],
   controllers: [AppController],
   providers: [AppService],
 })

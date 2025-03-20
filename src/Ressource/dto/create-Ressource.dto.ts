@@ -1,4 +1,10 @@
-import { IsNotEmpty, IsOptional, IsInt, IsBoolean, IsDateString } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsOptional,
+  IsInt,
+  IsBoolean,
+  IsDateString,
+} from 'class-validator';
 
 export class CreateRessourceDto {
   @IsNotEmpty()

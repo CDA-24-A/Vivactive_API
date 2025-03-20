@@ -2,6 +2,9 @@ import { IsNotEmpty } from 'class-validator';
 
 export class CreateCitizenDto {
   @IsNotEmpty()
+  clerkId: string;
+
+  @IsNotEmpty()
   name: string;
 
   @IsNotEmpty()

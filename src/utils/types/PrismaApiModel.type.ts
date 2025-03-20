@@ -11,12 +11,14 @@ import {
 export interface CitizenType
   extends Omit<
     CitizenModel,
-    'id' | 'password' | 'roleId' | 'createdAt' | 'updatedAt'
+    'id' | 'password' | 'roleId' | 'createdAt' | 'updatedAt' | 'clerkId'
   > {
   role: Omit<RoleModel, 'id' | 'createdAt' | 'updatedAt'>;
 }
 
 export type RoleType = Omit<RoleModel, 'id' | 'createdAt' | 'updatedAt'>;
+
+
 export interface RessourceType
   extends Omit<
     ResourceModel,
@@ -47,10 +49,7 @@ export interface CommentType
     | 'roleId'
     | 'email'
     | 'id'
+    | 'roleId'
     | 'Comment'
   >;
 }
-
-export type StepType = Omit<StepModel, 'id'>;
-
-export type ProgressionType = Omit<ProgressionModel, 'createdAt' | 'updatedAd'>;

@@ -3,6 +3,10 @@ import { IsNotEmpty, IsOptional } from 'class-validator';
 export class UpdateCitizenDto {
   @IsNotEmpty()
   @IsOptional()
+  clerkId: string;
+
+  @IsNotEmpty()
+  @IsOptional()
   name: string;
 
   @IsNotEmpty()

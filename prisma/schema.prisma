@@ -25,6 +25,7 @@ model Citizen {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
   Comment Comment[]
+    messages Message[]
 }
 
 model Role {
@@ -36,6 +37,17 @@ model Role {
 }
 
 model Comment {
+  id  String  @id @default(uuid())
+  title String
+  description String
+  citizen Citizen @relation(fields: [citizenId], references: [id])
+  citizenId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+}
+
+
+model Message {
   id  String  @id @default(uuid())
   title String
   description String

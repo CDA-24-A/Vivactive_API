@@ -14,3 +14,7 @@ export interface RoleType
   export interface CommentType extends Omit<CommentModel,'id' | 'citizenId' | 'updatedAt'> {
     citizen: Omit<CitizenType, 'role' | 'createdAt' | 'updatedAt' | 'password' | 'roleId' | 'email' | 'id' | 'roleId' | 'Comment'>;
   } 
+
+  export interface MessageType extends Omit<CommentModel,'id' | 'citizenId' | 'updatedAt'> {
+    citizen: Omit<CitizenType, 'role' | 'createdAt' | 'updatedAt' | 'password' | 'roleId' | 'email' | 'id' | 'roleId' | 'Comment'>;
+  } 

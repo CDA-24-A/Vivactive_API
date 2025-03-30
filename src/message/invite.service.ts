@@ -30,13 +30,13 @@ export class InviteService {
       });
       
     
-          if (!invites) {
+          if (!invite) {
             throw new InternalServerErrorException(
               `Une erreur est survenue lors de la création du Invite`,
             );
           }
     
-          return { data: invites, Invite: 'Invite créé avec succès' };
+          return { data: invite, Invite: 'Invite créé avec succès' };
         } catch (error) {
           if (error instanceof InternalServerErrorException) {
             throw error;

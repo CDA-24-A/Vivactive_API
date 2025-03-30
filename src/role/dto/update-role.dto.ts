@@ -3,7 +3,7 @@ import { CreateRoleDto } from './create-role.dto';
 import { IsNotEmpty, IsOptional } from 'class-validator';
 
 export class UpdateRoleDto extends PartialType(CreateRoleDto) {
-    @IsNotEmpty()
-    @IsOptional()
-      name: string;
+  @IsNotEmpty()
+  @IsOptional()
+  name: string;
 }

@@ -6,7 +6,8 @@ import {
   Ressource as ResourceModel,
   Step as StepModel,
   Progression as ProgressionModel,
-, Category as CategoryModel} from '@prisma/client';
+  Category as CategoryModel,
+} from '@prisma/client';
 
 export interface CitizenType
   extends Omit<
@@ -17,7 +18,6 @@ export interface CitizenType
 }
 
 export type RoleType = Omit<RoleModel, 'id' | 'createdAt' | 'updatedAt'>;
-
 
 export interface RessourceType
   extends Omit<
@@ -49,7 +49,15 @@ export interface CommentType
     | 'roleId'
     | 'email'
     | 'id'
-    | 'roleId'
     | 'Comment'
   >;
 }
+
+export type CategoryType = Omit<
+  CategoryModel,
+  'id' | 'createdAt' | 'updatedAt' | 'ressource'
+>;
+
+export type ProgressionType = Omit<ProgressionModel, 'createdAt' | 'updatedAd'>;
+
+export type StepType = Omit<StepModel, 'id'>;

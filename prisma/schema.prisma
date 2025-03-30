@@ -16,7 +16,7 @@ datasource db {
 
 model Citizen {
   id    String  @id @default(uuid())
-  clerkId String
+  clerkId String @unique
   email String  @unique 
   name  String 
   surname String

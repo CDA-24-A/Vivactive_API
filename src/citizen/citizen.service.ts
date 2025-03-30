@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import {
   Injectable,
@@ -246,6 +245,7 @@ export class CitizenService {
         throw new NotFoundException('Citoyen non trouvé');
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await this.clerkService.deleteClerkUser(citizen.clerkId);
 
       await this.prisma.citizen.delete({ where: { id: id } });

@@ -6,8 +6,6 @@ import {
   Patch,
   Param,
   Delete,
-  BadRequestException,
-  NotFoundException,
   Query,
 } from '@nestjs/common';
 import { InviteService } from './invite.service';
@@ -21,18 +19,18 @@ export class InviteController {
   constructor(private readonly InviteService: InviteService) {}
 
   @Post()
-  create(@Body() createInviteDto: CreateInviteDto) : Promise<ApiReturns<InviteType | null>> {
+  create(
+    @Body() createInviteDto: CreateInviteDto,
+  ): Promise<ApiReturns<InviteType | null>> {
     return this.InviteService.create(createInviteDto);
   }
 
   @Get()
-    findAll(
-      @Query('citizenId') citizenId: string | undefined,
-    ): Promise<ApiReturns<InviteType[] | null>> {
-      return this.InviteService.findAll(
-        citizenId
-      );
-    }
+  findAll(
+    @Query('citizenId') citizenId: string | undefined,
+  ): Promise<ApiReturns<InviteType[] | null>> {
+    return this.InviteService.findAll(citizenId);
+  }
 
   @Get(':id')
   findOne(@Param('id') id: string) {

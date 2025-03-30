@@ -25,7 +25,7 @@ model Citizen {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
   Comment Comment[]
-    messages Message[]
+  messages Message[]
   sentInvites    Invite[] @relation("CitizenSentInvites")
   receivedInvites Invite[] @relation("CitizenReceivedInvites")
   }

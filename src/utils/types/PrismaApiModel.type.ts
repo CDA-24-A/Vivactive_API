@@ -1,4 +1,8 @@
-import { Role as RoleModel, Citizen as CitizenModel, Comment as CommentModel } from '@prisma/client';
+import {
+  Role as RoleModel,
+  Citizen as CitizenModel,
+  Comment as CommentModel,
+} from '@prisma/client';
 
 export interface CitizenType
   extends Omit<
@@ -8,16 +12,40 @@ export interface CitizenType
   role: Omit<RoleModel, 'id' | 'createdAt' | 'updatedAt'>;
 }
 
-export interface RoleType
-  extends Omit<RoleModel, 'id' | 'createdAt' | 'updatedAt'> {}
+export type RoleType = Omit<RoleModel, 'id' | 'createdAt' | 'updatedAt'>;
 
-  export interface CommentType extends Omit<CommentModel,'id' | 'citizenId' | 'updatedAt'> {
-    citizen: Omit<CitizenType, 'role' | 'createdAt' | 'updatedAt' | 'password' | 'roleId' | 'email' | 'id' | 'roleId' | 'Comment'>;
-  } 
+export interface CommentType
+  extends Omit<CommentModel, 'id' | 'citizenId' | 'updatedAt'> {
+  citizen: Omit<
+    CitizenType,
+    | 'role'
+    | 'createdAt'
+    | 'updatedAt'
+    | 'password'
+    | 'roleId'
+    | 'email'
+    | 'id'
+    | 'Comment'
+    | 'sentInvites'
+    | 'recivedInvites'
+  >;
+}
 
-  export interface InviteType extends Omit<CommentModel,'id' | 'citizenId' | 'updatedAt'> {
-    citizen: Omit<CitizenType, 'role' | 'createdAt'>;
-  } 
-  export interface MessageType extends Omit<CommentModel,'id' | 'citizenId' | 'updatedAt'> {
-    citizen: Omit<CitizenType, 'role' | 'createdAt' | 'updatedAt' | 'password' | 'roleId' | 'email' | 'id' | 'roleId' | 'Comment'>;
-  } 
+export interface InviteType
+  extends Omit<CommentModel, 'id' | 'citizenId' | 'updatedAt'> {
+  citizen: Omit<CitizenType, 'role' | 'createdAt'>;
+}
+export interface MessageType
+  extends Omit<CommentModel, 'id' | 'citizenId' | 'updatedAt'> {
+  citizen: Omit<
+    CitizenType,
+    | 'role'
+    | 'createdAt'
+    | 'updatedAt'
+    | 'password'
+    | 'roleId'
+    | 'email'
+    | 'id'
+    | 'Comment'
+  >;
+}

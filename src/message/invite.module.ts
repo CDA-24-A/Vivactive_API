@@ -5,6 +5,6 @@ import { PrismaService } from 'src/prisma.service';
 
 @Module({
   controllers: [InviteController],
-  providers: [InviteService,  PrismaService],
+  providers: [InviteService, PrismaService],
 })
 export class InviteModule {}

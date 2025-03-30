@@ -1,4 +1,10 @@
-import { BadRequestException, ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateInviteDto } from './dto/create-invite.dto';
 import { UpdateInviteDto } from './dto/update-invite.dto';
 import { PrismaService } from 'src/prisma.service';
@@ -7,8 +13,7 @@ import { PrismaService } from 'src/prisma.service';
 export class InviteService {
   constructor(private prisma: PrismaService) {}
   async create(createInviteDto: CreateInviteDto) {
-    try {    
-    
+    try {
       const invite = await this.prisma.invite.update({
         data: createInviteDto,
         select: {
@@ -28,29 +33,28 @@ export class InviteService {
           },
         },
       });
-      
-    
-          if (!invite) {
-            throw new InternalServerErrorException(
-              `Une erreur est survenue lors de la création du Invite`,
-            );
-          }
-    
-          return { data: invite, Invite: 'Invite créé avec succès' };
-        } catch (error) {
-          if (error instanceof InternalServerErrorException) {
-            throw error;
-          }
-          if (error.code === 'P2002') {
-            throw new BadRequestException(
-              'Une erreur de validation est survenue (données dupliquées)',
-            );
-          }
-          console.error(error);
-          throw new InternalServerErrorException(
-            'Une erreur inconnue est survenue',
-          );
-        }
+
+      if (!invite) {
+        throw new InternalServerErrorException(
+          `Une erreur est survenue lors de la création du Invite`,
+        );
+      }
+
+      return { data: invite, Invite: 'Invite créé avec succès' };
+    } catch (error) {
+      if (error instanceof InternalServerErrorException) {
+        throw error;
+      }
+      if (error.code === 'P2002') {
+        throw new BadRequestException(
+          'Une erreur de validation est survenue (données dupliquées)',
+        );
+      }
+      console.error(error);
+      throw new InternalServerErrorException(
+        'Une erreur inconnue est survenue',
+      );
+    }
   }
 
   async findAll(citizenId: string | undefined) {
@@ -76,7 +80,6 @@ export class InviteService {
           },
         },
       });
-      
 
       if (!invites || invites.length === 0) {
         throw new NotFoundException('Aucun Invite trouvé');
@@ -121,7 +124,6 @@ export class InviteService {
           },
         },
       });
-      
 
       if (!invite) {
         throw new NotFoundException('Invite non trouvé');
@@ -141,7 +143,6 @@ export class InviteService {
 
   async update(id: string, updateInviteDto: UpdateInviteDto) {
     try {
-
       const invite = await this.prisma.invite.update({
         data: updateInviteDto,
         where: { id: id },
@@ -162,50 +163,49 @@ export class InviteService {
           },
         },
       });
-      
-    
-          if (!invite) {
-            throw new NotFoundException('Invite non trouvé pour la mise à jour');
-          }
-    
-          return { data: invite, Invite: 'Invite mis à jour avec succès' };
-        } catch (error) {
-          if (error instanceof NotFoundException) {
-            throw error;
-          }
-          if (error.code === 'P2002') {
-            throw new BadRequestException('Contrainte violée : donnée dupliquée');
-          }
-          console.error(error);
-          throw new InternalServerErrorException(
-            'Une erreur inconnue est survenue',
-          );
-        }
+
+      if (!invite) {
+        throw new NotFoundException('Invite non trouvé pour la mise à jour');
+      }
+
+      return { data: invite, Invite: 'Invite mis à jour avec succès' };
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      if (error.code === 'P2002') {
+        throw new BadRequestException('Contrainte violée : donnée dupliquée');
+      }
+      console.error(error);
+      throw new InternalServerErrorException(
+        'Une erreur inconnue est survenue',
+      );
+    }
   }
 
   async remove(id: string) {
     try {
-          const Invite = await this.prisma.invite.findUnique({
-            where: { id: id },
-          });
-          if (!Invite) {
-            throw new NotFoundException('Invite non trouvé');
-          }
-    
-          await this.prisma.invite.delete({ where: { id: id } });
-          return { Invite: 'Invite supprimé avec succès' };
-        } catch (error) {
-          if (error instanceof NotFoundException) {
-            throw error;
-          }
-          if (error.code === 'P2003') {
-            throw new ForbiddenException(
-              'Impossible de supprimer ce Invite : contrainte de dépendance',
-            );
-          }
-          throw new InternalServerErrorException(
-            'Une erreur inconnue est survenue lors de la suppression du Invite',
-          );
-        }
+      const Invite = await this.prisma.invite.findUnique({
+        where: { id: id },
+      });
+      if (!Invite) {
+        throw new NotFoundException('Invite non trouvé');
+      }
+
+      await this.prisma.invite.delete({ where: { id: id } });
+      return { Invite: 'Invite supprimé avec succès' };
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      if (error.code === 'P2003') {
+        throw new ForbiddenException(
+          'Impossible de supprimer ce Invite : contrainte de dépendance',
+        );
+      }
+      throw new InternalServerErrorException(
+        'Une erreur inconnue est survenue lors de la suppression du Invite',
+      );
+    }
   }
 }

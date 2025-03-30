@@ -1,6 +1,6 @@
 import { IsNotEmpty } from 'class-validator';
 
-export class CreateMessageDto {
+export class CreateInviteDto {
   @IsNotEmpty()
   title: string;
   @IsNotEmpty()

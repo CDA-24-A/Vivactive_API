@@ -6,6 +6,7 @@ import {
   Delete,
   Put,
   Post,
+  Query,
 } from '@nestjs/common';
 import { ProgressionService } from './progression.service';
 import { UpdateProgressionDto } from './dto/update-progression.dto';
@@ -16,15 +17,12 @@ import { CreateProgressionDto } from './dto/create-progression.dto';
 export class ProgressionController {
   constructor(private readonly progressionService: ProgressionService) {}
 
-  @Get(':citizenId/:ressourceId')
-  async getProgressionByRessource(
-    @Param('citizenId') citizenId: string,
-    @Param('ressourceId') ressourceId: string,
+  @Get()
+  async getProgression(
+    @Query('citizenId') citizenId: string,
+    @Query('ressourceId') ressourceId: string,
   ) {
-    return this.progressionService.getProgressionByRessource(
-      citizenId,
-      ressourceId,
-    );
+    return this.progressionService.getProgression(citizenId, ressourceId);
   }
 
   @Post()

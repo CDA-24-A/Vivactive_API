@@ -56,7 +56,12 @@ export class ProgressionService {
     };
   }
 
-  async getProgressionByRessource(citizenId: string, ressourceId: string) {
+  async getProgression(citizenId: string, ressourceId: string) {
+    if (!citizenId || !ressourceId) {
+      throw new BadRequestException(
+        'Veuillez renseigner le citizen et la ressource',
+      );
+    }
     try {
       await this.initializeProgression({
         citizenId,

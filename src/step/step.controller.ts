@@ -10,7 +10,7 @@ import {
 import { StepService } from './step.service';
 import { CreateStepDto } from './dto/create-step.dto';
 import { UpdateStepDto } from './dto/update-step.dto';
-import { StepType } from 'src/utils/types/PrismaApiModel.type';
+import { Step as StepModel } from '@prisma/client';
 import { ApiReturns } from 'src/utils/types/ApiReturns.type';
 
 @Controller('step')
@@ -20,17 +20,17 @@ export class StepController {
   @Post()
   create(
     @Body() createStepDto: CreateStepDto,
-  ): Promise<ApiReturns<StepType | null>> {
+  ): Promise<ApiReturns<StepModel | null>> {
     return this.stepService.create(createStepDto);
   }
 
   @Get()
-  findAll(): Promise<ApiReturns<StepType[] | null>> {
+  findAll(): Promise<ApiReturns<StepModel[] | null>> {
     return this.stepService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<ApiReturns<StepType | null>> {
+  findOne(@Param('id') id: string): Promise<ApiReturns<StepModel | null>> {
     return this.stepService.findOne(id);
   }
 
@@ -38,7 +38,7 @@ export class StepController {
   update(
     @Param('id') id: string,
     @Body() updateStepDto: UpdateStepDto,
-  ): Promise<ApiReturns<StepType | null>> {
+  ): Promise<ApiReturns<StepModel | null>> {
     return this.stepService.update(id, updateStepDto);
   }
 

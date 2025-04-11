@@ -6,8 +6,6 @@ import {
   Patch,
   Param,
   Delete,
-  BadRequestException,
-  NotFoundException,
   Query,
 } from '@nestjs/common';
 import { CommentService } from './comment.service';
@@ -21,18 +19,18 @@ export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
   @Post()
-  create(@Body() createCommentDto: CreateCommentDto) : Promise<ApiReturns<CommentType | null>> {
+  create(
+    @Body() createCommentDto: CreateCommentDto,
+  ): Promise<ApiReturns<CommentType | null>> {
     return this.commentService.create(createCommentDto);
   }
 
   @Get()
-    findAll(
-      @Query('citizenId') citizenId: string | undefined,
-    ): Promise<ApiReturns<CommentType[] | null>> {
-      return this.commentService.findAll(
-        citizenId
-      );
-    }
+  findAll(
+    @Query('citizenId') citizenId: string | undefined,
+  ): Promise<ApiReturns<CommentType[] | null>> {
+    return this.commentService.findAll(citizenId);
+  }
 
   @Get(':id')
   findOne(@Param('id') id: string) {

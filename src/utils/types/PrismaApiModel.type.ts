@@ -14,10 +14,8 @@ export interface CitizenType
     CitizenModel,
     'id' | 'password' | 'roleId' | 'createdAt' | 'updatedAt' | 'clerkId'
   > {
-  role: Omit<RoleModel, 'id' | 'createdAt' | 'updatedAt'>;
+  role: Omit<RoleModel, 'createdAt' | 'updatedAt'>;
 }
-
-export type RoleType = Omit<RoleModel, 'id' | 'createdAt' | 'updatedAt'>;
 
 export interface RessourceType
   extends Omit<
@@ -31,15 +29,28 @@ export interface RessourceType
     | 'banner'
     | 'bannerId'
     | 'file'
+    | 'comment'
   > {
-  file?: Omit<FileModel, 'id' | 'resources'> | null;
-  step: Array<Omit<StepModel, 'id' | 'ressourceId'> | null>;
+  file?: Omit<FileModel, 'resources'> | null;
+  step: Array<Omit<StepModel, 'ressourceId'> | null>;
 }
 
-export type FileType = Omit<FileModel, 'id' | 'resources'>;
+export interface RessourceWithCommentType extends RessourceType {
+  comment: Array<RessourceComment | null>;
+}
+
+interface RessourceComment
+  extends Omit<
+    CommentModel,
+    'createdAt' | 'ressourceId' | 'citizen' | 'citizenId'
+  > {
+  citizen: Pick<CitizenModel, 'name' | 'surname'>;
+}
+
+export type FileType = Omit<FileModel, 'resources'>;
 
 export interface CommentType
-  extends Omit<CommentModel, 'id' | 'citizenId' | 'updatedAt'> {
+  extends Omit<CommentModel, 'citizenId' | 'createdAt'> {
   citizen: Omit<
     CitizenType,
     | 'role'
@@ -49,15 +60,13 @@ export interface CommentType
     | 'roleId'
     | 'email'
     | 'id'
-    | 'Comment'
+    | 'comment'
   >;
 }
 
 export type CategoryType = Omit<
   CategoryModel,
-  'id' | 'createdAt' | 'updatedAt' | 'ressource'
+  'createdAt' | 'updatedAt' | 'ressource'
 >;
 
 export type ProgressionType = Omit<ProgressionModel, 'createdAt' | 'updatedAd'>;
-
-export type StepType = Omit<StepModel, 'id'>;

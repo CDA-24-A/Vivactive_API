@@ -18,6 +18,7 @@ export class StepService {
       const step = await this.prisma.step.create({
         data: createStepDto,
         select: {
+          id: true,
           title: true,
           description: true,
           order: true,
@@ -52,6 +53,7 @@ export class StepService {
     try {
       const steps = await this.prisma.step.findMany({
         select: {
+          id: true,
           title: true,
           description: true,
           order: true,
@@ -83,6 +85,7 @@ export class StepService {
       const step = await this.prisma.step.findUnique({
         where: { id: id },
         select: {
+          id: true,
           title: true,
           description: true,
           order: true,
@@ -112,6 +115,7 @@ export class StepService {
         data: updateStepDto,
         where: { id: id },
         select: {
+          id: true,
           title: true,
           description: true,
           order: true,

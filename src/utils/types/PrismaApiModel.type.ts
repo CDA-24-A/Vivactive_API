@@ -8,6 +8,7 @@ import {
   Progression as ProgressionModel,
   Category as CategoryModel,
   Favorite as FavoriteModel,
+  Message as MessageModel,
 } from '@prisma/client';
 
 export interface CitizenType
@@ -65,6 +66,6 @@ export type StepType = Omit<StepModel, 'id'>;
 
 export type FavoriteType = Omit<FavoriteModel, 'id' | 'createdAt'| 'updatedAt'> 
 
-export interface MessageType extends Omit<CommentModel,'id' | 'citizenId' | 'updatedAt'> {
+export interface MessageType extends Omit<MessageModel,'id' | 'citizenId' | 'updatedAt'> {
   citizen: Omit<CitizenType, 'role' | 'createdAt' | 'updatedAt' | 'password' | 'roleId' | 'email' | 'id' | 'roleId' | 'Comment'>;}
 

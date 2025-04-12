@@ -33,8 +33,23 @@ export interface CommentType
 
 export interface InviteType
   extends Omit<CommentModel, 'id' | 'citizenId' | 'updatedAt'> {
-  citizen: Omit<CitizenType, 'role' | 'createdAt'>;
+  citizen: Omit<CitizenType,
+  | 'role'
+  | 'createdAt'
+  | 'updatedAt'
+  | 'password'
+  | 'roleId'
+  | 'email'
+  | 'id'
+  | 'Comment'
+  | 'name'
+  | 'surname'
+  | 'messages'
+  | 'receivedInvites'
+  | 'sentInvites'
+>;
 }
+
 export interface MessageType
   extends Omit<CommentModel, 'id' | 'citizenId' | 'updatedAt'> {
   citizen: Omit<

@@ -2,8 +2,9 @@ import { IsNotEmpty } from 'class-validator';
 
 export class CreateInviteDto {
   @IsNotEmpty()
-  title: string;
+  accept: boolean;
   @IsNotEmpty()
-  description: string;
-  citizenId: string;
+  senderId: string;
+  receverId: string;
+  createdAt: Date;
 }

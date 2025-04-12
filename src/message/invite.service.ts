@@ -12,9 +12,9 @@ import { PrismaService } from 'src/prisma.service';
 @Injectable()
 export class InviteService {
   constructor(private prisma: PrismaService) {}
-  async create(createInviteDto: CreateInviteDto) {
+async create(createInviteDto: CreateInviteDto) {
     try {
-      const invite = await this.prisma.invite.update({
+      const invite = await this.prisma.invite.create({
         data: createInviteDto,
         select: {
           accept: true,
@@ -36,11 +36,11 @@ export class InviteService {
 
       if (!invite) {
         throw new InternalServerErrorException(
-          `Une erreur est survenue lors de la création du Invite`,
+          `Une erreur est survenue lors de la création du invite`,
         );
       }
 
-      return { data: invite, Invite: 'Invite créé avec succès' };
+      return { data: invite, message: 'invite créé avec succès' };
     } catch (error) {
       if (error instanceof InternalServerErrorException) {
         throw error;
@@ -104,8 +104,7 @@ export class InviteService {
 
   async findOne(id: string) {
     try {
-      const invite = await this.prisma.invite.update({
-        data: UpdateInviteDto,
+      const invite = await this.prisma.invite.findUnique({
         where: { id: id },
         select: {
           accept: true,
@@ -129,7 +128,7 @@ export class InviteService {
         throw new NotFoundException('Invite non trouvé');
       }
 
-      return { data: invite, Invite: 'Invite récupéré avec succès' };
+      return { data: invite, message: 'Invite récupéré avec succès' };
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw error;

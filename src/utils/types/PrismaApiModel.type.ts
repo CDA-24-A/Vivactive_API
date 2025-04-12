@@ -7,6 +7,7 @@ import {
   Step as StepModel,
   Progression as ProgressionModel,
   Category as CategoryModel,
+  Favorite as FavoriteModel,
 } from '@prisma/client';
 
 export interface CitizenType
@@ -61,3 +62,5 @@ export type CategoryType = Omit<
 export type ProgressionType = Omit<ProgressionModel, 'createdAt' | 'updatedAd'>;
 
 export type StepType = Omit<StepModel, 'id'>;
+
+export type FavoriteType = Omit<FavoriteModel, 'id' | 'createdAt'| 'updatedAt'> 

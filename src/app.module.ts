@@ -9,6 +9,7 @@ import { StepModule } from './step/step.module';
 import { ProgressionModule } from './progression/progression.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { RoleModule } from './role/role.module';
+import { FavoriteModule } from './favorite/favorite.module';
 
 @Module({
   imports: [
@@ -19,7 +20,8 @@ import { RoleModule } from './role/role.module';
     StepModule,
     ProgressionModule,
     ScheduleModule.forRoot(),
-    CategoryModule],
+    CategoryModule,
+    FavoriteModule],
   controllers: [AppController],
   providers: [AppService],
 })

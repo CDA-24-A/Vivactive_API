@@ -27,6 +27,7 @@ model Citizen {
   updatedAt DateTime @updatedAt @default(now())
   Comment Comment[]
   progression Progression[]
+  favorites Favorite[]
 }
 
 model Role {
@@ -52,6 +53,7 @@ model Ressource {
   banner         Image?   @relation(fields: [bannerId], references: [id])
   bannerId       String?
   step           Step[]
+  favorites      Favorite[]
   isValidate     Boolean
   status         String
   createdAt      DateTime @default(now())
@@ -109,4 +111,16 @@ model Progression {
   stepId String
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+}
+
+model Favorite {
+  id String  @id @default(uuid())
+  citizen Citizen @relation(fields: [citizenId], references: [id])
+  citizenId String
+  ressource Ressource @relation(fields: [ressourceId], references: [id])
+  ressourceId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([citizenId, ressourceId])
 }

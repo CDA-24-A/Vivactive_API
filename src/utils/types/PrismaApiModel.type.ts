@@ -64,3 +64,7 @@ export type ProgressionType = Omit<ProgressionModel, 'createdAt' | 'updatedAd'>;
 export type StepType = Omit<StepModel, 'id'>;
 
 export type FavoriteType = Omit<FavoriteModel, 'id' | 'createdAt'| 'updatedAt'> 
+
+export interface MessageType extends Omit<CommentModel,'id' | 'citizenId' | 'updatedAt'> {
+  citizen: Omit<CitizenType, 'role' | 'createdAt' | 'updatedAt' | 'password' | 'roleId' | 'email' | 'id' | 'roleId' | 'Comment'>;}
+

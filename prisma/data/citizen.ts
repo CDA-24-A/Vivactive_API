@@ -1,6 +1,5 @@
 import { PrismaClient } from '@prisma/client';
 import { faker } from '@faker-js/faker';
-import * as bcrypt from 'bcrypt';
 import { Role as RoleModel } from '@prisma/client';
 
 const prisma = new PrismaClient();
@@ -25,7 +24,6 @@ export async function createCitizen(roles: RoleModel[]) {
         email: faker.internet.email(),
         name: faker.person.firstName(),
         surname: faker.person.lastName(),
-        password: await bcrypt.hash(faker.internet.password(), 10),
         roleId: switchRole(roles),
         clerkId: `fakeId+${i}`,
       },

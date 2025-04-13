@@ -20,7 +20,6 @@ model Citizen {
   email String  @unique 
   name  String 
   surname String
-  password String
   role Role @relation(fields: [roleId], references: [id])
   roleId String
   createdAt DateTime @default(now())

@@ -10,7 +10,10 @@ import {
 } from '@nestjs/common';
 import { CitizenService } from './citizen.service';
 import { CreateCitizenDto } from './dto/create-citizen.dto';
-import { UpdateCitizenDto } from './dto/update-citizen.dto';
+import {
+  UpdateCitizenCredentialsDto,
+  UpdateCitizenDto,
+} from './dto/update-citizen.dto';
 import { ApiReturns } from 'src/utils/types/ApiReturns.type';
 import { validatePagination } from 'src/utils/pageQueryhandeler';
 import { CitizenType } from 'src/utils/types/PrismaApiModel.type';
@@ -49,6 +52,13 @@ export class CitizenController {
   @Get(':id')
   findOne(@Param('id') id: string): Promise<ApiReturns<CitizenType | null>> {
     return this.citizenService.findOne(id);
+  }
+
+  @Patch('/credentials')
+  updateCredentials(
+    @Body() updateCitizenDto: UpdateCitizenCredentialsDto,
+  ): Promise<Record<'message', string>> {
+    return this.citizenService.updateCredentials(updateCitizenDto);
   }
 
   @Patch(':id')

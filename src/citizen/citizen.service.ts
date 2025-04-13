@@ -7,10 +7,13 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { CreateCitizenDto } from './dto/create-citizen.dto';
-import { UpdateCitizenDto } from './dto/update-citizen.dto';
+import {
+  UpdateCitizenCredentialsDto,
+  UpdateCitizenDto,
+} from './dto/update-citizen.dto';
 import { PrismaService } from 'src/prisma.service';
 import { ClerkService } from 'src/auth/clerk.service';
-import * as bcrypt from 'bcrypt';
+import { User } from '@clerk/clerk-sdk-node';
 
 @Injectable()
 export class CitizenService {
@@ -18,36 +21,36 @@ export class CitizenService {
     private prisma: PrismaService,
     private clerkService: ClerkService,
   ) {}
-  private readonly saltRounds = 10;
-
-  private async hashingPassword(password: string): Promise<string> {
-    return bcrypt.hash(password, this.saltRounds);
-  }
-
-  // A mettre avec le auth
-  // async validatePassword(
-  //   plainPassword: string,
-  //   hashedPassword: string,
-  // ): Promise<boolean> {
-  //   return bcrypt.compare(plainPassword, hashedPassword);
-  // }
 
   async create(createCitizenDto: CreateCitizenDto) {
     try {
-      const hashedPassword = await this.hashingPassword(
-        createCitizenDto.password,
-      );
+      let clerkUser: User | undefined;
 
-      const clerkUser = await this.clerkService.getClerkUser(createCitizenDto);
+      clerkUser = await this.clerkService.getClerkUser(createCitizenDto);
 
-      const citizenData = {
-        ...createCitizenDto,
-        password: hashedPassword,
+      console.log(clerkUser);
+
+      if (!clerkUser) {
+        clerkUser = await this.clerkService.createClerkUser(createCitizenDto);
+      }
+
+      const defaultRoleId = await this.prisma.role.findUnique({
+        where: { name: 'USER' },
+        select: {
+          id: true,
+        },
+      });
+
+      const newUser = {
+        name: clerkUser.firstName || '',
+        surname: clerkUser.lastName || '',
+        email: clerkUser.emailAddresses[0].emailAddress,
+        roleId: createCitizenDto.roleId || defaultRoleId?.id || 'null',
         clerkId: clerkUser.id,
       };
 
       const citizen = await this.prisma.citizen.create({
-        data: citizenData,
+        data: newUser,
         select: {
           email: true,
           name: true,
@@ -66,6 +69,14 @@ export class CitizenService {
 
       return { data: citizen, message: 'Citoyen créé avec succès' };
     } catch (error) {
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
+
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+
       if (error instanceof InternalServerErrorException) {
         throw error;
       }
@@ -197,13 +208,6 @@ export class CitizenService {
         updateCitizenDto,
       );
 
-      if (updateCitizenDto.password) {
-        const hashedPassword = await this.hashingPassword(
-          updateCitizenDto.password,
-        );
-        citizenData.password = hashedPassword;
-      }
-
       const citizen = await this.prisma.citizen.update({
         data: citizenData,
         where: { id: id },
@@ -236,6 +240,30 @@ export class CitizenService {
     }
   }
 
+  async updateCredentials(updateCitizenDto: UpdateCitizenCredentialsDto) {
+    try {
+      const citizenData = updateCitizenDto;
+
+      await this.clerkService.updateClerkUserCredentials(
+        citizenData.clerkId,
+        updateCitizenDto,
+      );
+
+      return { message: 'Mot de passe mis à jour avec succès' };
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      if (error.code === 'P2002') {
+        throw new BadRequestException('Contrainte violée : donnée dupliquée');
+      }
+      console.error(error);
+      throw new InternalServerErrorException(
+        'Une erreur inconnue est survenue',
+      );
+    }
+  }
+
   async remove(id: string) {
     try {
       const citizen = await this.prisma.citizen.findUnique({
@@ -245,7 +273,6 @@ export class CitizenService {
         throw new NotFoundException('Citoyen non trouvé');
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await this.clerkService.deleteClerkUser(citizen.clerkId);
 
       await this.prisma.citizen.delete({ where: { id: id } });

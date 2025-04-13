@@ -1,8 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { clerkClient } from '@clerk/clerk-sdk-node';
 import { CreateCitizenDto } from 'src/citizen/dto/create-citizen.dto';
-import { UpdateCitizenDto } from 'src/citizen/dto/update-citizen.dto';
+import {
+  UpdateCitizenCredentialsDto,
+  UpdateCitizenDto,
+} from 'src/citizen/dto/update-citizen.dto';
 
 @Injectable()
 export class ClerkService {
@@ -19,7 +26,12 @@ export class ClerkService {
       });
       return response;
     } catch (error) {
-      console.error('Erreur Clerk:', error.response?.data || error.message);
+      console.error('Erreur Clerk:', error);
+      if (error.status === 422) {
+        throw new BadRequestException(
+          'Une erreur est survenu, vieullez vérifier les informations transmises',
+        );
+      }
       throw new InternalServerErrorException(
         'Erreur lors de la création dans Clerk',
       );
@@ -31,6 +43,22 @@ export class ClerkService {
       const response = await clerkClient.users.updateUser(clerkId, {
         firstName: citizenData.name,
         lastName: citizenData.surname,
+      });
+      return response;
+    } catch (error) {
+      console.error('Erreur Clerk:', error);
+      throw new InternalServerErrorException(
+        'Erreur lors de la mise à jour dans Clerk',
+      );
+    }
+  }
+
+  async updateClerkUserCredentials(
+    clerkId: string,
+    citizenData: UpdateCitizenCredentialsDto,
+  ) {
+    try {
+      const response = await clerkClient.users.updateUser(clerkId, {
         password: citizenData.password,
       });
       return response;
@@ -43,6 +71,10 @@ export class ClerkService {
   }
 
   async getClerkUser(citizenData: CreateCitizenDto) {
+    if (!citizenData.clerkId) {
+      return undefined;
+    }
+
     try {
       const response = await clerkClient.users.getUser(citizenData.clerkId);
       return response;

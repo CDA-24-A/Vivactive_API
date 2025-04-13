@@ -57,6 +57,8 @@ model Ressource {
   comment        Comment[]
   isValidate     Boolean
   status         String
+  ressourceType   RessourceType @relation(fields: [resourceTypeId], references: [id])
+  resourceTypeId String
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 }
@@ -137,4 +139,10 @@ model Message {
   citizenId String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
+}
+
+model RessourceType {
+  id         String      @id @default(uuid())
+  name       String
+  ressource   Ressource[]
 }

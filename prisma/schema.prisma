@@ -72,13 +72,13 @@ model Category {
 
 model File {
   id        String    @id @default(uuid())
-  path      String
+  path      Bytes
   ressources Ressource[]
 }
 
 model Image {
   id        String    @id @default(uuid())
-  url       String
+  url       Bytes
   ressources Ressource[]
 }
 

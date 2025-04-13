@@ -10,6 +10,7 @@ import { ProgressionModule } from './progression/progression.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { RoleModule } from './role/role.module';
 import { FavoriteModule } from './favorite/favorite.module';
+import { MessageModule } from './message/message.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { FavoriteModule } from './favorite/favorite.module';
     ProgressionModule,
     ScheduleModule.forRoot(),
     CategoryModule,
+    MessageModule,
     FavoriteModule],
   controllers: [AppController],
   providers: [AppService],

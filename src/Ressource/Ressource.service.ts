@@ -16,8 +16,40 @@ export class RessourceService {
 
   async create(createRessourceDto: CreateRessourceDto) {
     try {
+      const {
+        fileBytes,
+        bannerBytes,
+        ...ressourceData
+      } = createRessourceDto;
+  
+      // ➕ Ici on indique les bons types explicitement
+      let file: { id: string } | null = null;
+      let banner: { id: string } | null = null;
+  
+      if (fileBytes) {
+        file = await this.prisma.file.create({
+          data: {
+            path: Buffer.from(fileBytes, 'base64'),
+          },
+          select: { id: true }, // ⚠️ On sélectionne seulement l'id, sinon on a un objet trop gros
+        });
+      }
+  
+      if (bannerBytes) {
+        banner = await this.prisma.image.create({
+          data: {
+            url: Buffer.from(bannerBytes, 'base64'),
+          },
+          select: { id: true },
+        });
+      }
+  
       const Ressource = await this.prisma.ressource.create({
-        data: createRessourceDto,
+        data: {
+          ...ressourceData,
+          fileId: file?.id,
+          bannerId: banner?.id,
+        },
         select: {
           title: true,
           description: true,
@@ -32,23 +64,14 @@ export class RessourceService {
           category: {
             select: { name: true },
           },
-          banner: { 
+          banner: {
             select: { url: true },
           },
         },
       });
-
-      if (!Ressource) {
-        throw new InternalServerErrorException(
-          `Une erreur est survenue lors de la création de la Ressources`,
-        );
-      }
-
+  
       return { data: Ressource, message: 'Ressources créé avec succès' };
     } catch (error) {
-      if (error instanceof InternalServerErrorException) {
-        throw error;
-      }
       if (error.code === 'P2002') {
         throw new BadRequestException(
           'Une erreur de validation est survenue (données dupliquées)',
@@ -60,6 +83,7 @@ export class RessourceService {
       );
     }
   }
+  
 
   async findAll(
     page: number = 1,

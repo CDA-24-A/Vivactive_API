@@ -56,7 +56,7 @@ export class CitizenService {
           name: true,
           surname: true,
           role: {
-            select: { name: true },
+            select: { id: true, name: true },
           },
         },
       });
@@ -141,7 +141,7 @@ export class CitizenService {
           name: true,
           surname: true,
           role: {
-            select: { name: true },
+            select: { id: true, name: true },
           },
         },
       });
@@ -178,7 +178,7 @@ export class CitizenService {
           name: true,
           surname: true,
           role: {
-            select: { name: true },
+            select: { id: true, name: true },
           },
         },
       });
@@ -216,7 +216,7 @@ export class CitizenService {
           name: true,
           surname: true,
           role: {
-            select: { name: true },
+            select: { id: true, name: true },
           },
         },
       });

@@ -13,7 +13,10 @@ import { CreateRessourceDto } from './dto/create-Ressource.dto';
 import { UpdateRessourceDto } from './dto/update-Ressource.dto';
 import { ApiReturns } from 'src/utils/types/ApiReturns.type';
 import { validatePagination } from 'src/utils/pageQueryhandeler';
-import { RessourceType } from 'src/utils/types/PrismaApiModel.type';
+import {
+  RessourceType,
+  RessourceWithCommentType,
+} from 'src/utils/types/PrismaApiModel.type';
 
 @Controller('Ressource')
 export class RessourceController {
@@ -47,7 +50,9 @@ export class RessourceController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<ApiReturns<RessourceType | null>> {
+  findOne(
+    @Param('id') id: string,
+  ): Promise<ApiReturns<RessourceWithCommentType | null>> {
     return this.RessourceService.findOne(id);
   }
 

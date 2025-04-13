@@ -19,6 +19,7 @@ export class RessourceService {
       const Ressource = await this.prisma.ressource.create({
         data: createRessourceDto,
         select: {
+          id: true,
           title: true,
           description: true,
           maxParticipant: true,
@@ -27,16 +28,17 @@ export class RessourceService {
           isValidate: true,
           status: true,
           file: {
-            select: { path: true },
+            select: { path: true, id: true },
           },
           category: {
-            select: { name: true },
+            select: { name: true, id: true },
           },
           banner: {
-            select: { url: true },
+            select: { url: true, id: true },
           },
           step: {
             select: {
+              id: true,
               title: true,
               description: true,
               order: true,
@@ -113,6 +115,7 @@ export class RessourceService {
           [orderBy]: sortBy,
         },
         select: {
+          id: true,
           title: true,
           description: true,
           maxParticipant: true,
@@ -121,7 +124,7 @@ export class RessourceService {
           isValidate: true,
           status: true,
           file: {
-            select: { path: true },
+            select: { path: true, id: true },
           },
         },
       });
@@ -154,6 +157,7 @@ export class RessourceService {
       const Ressource = await this.prisma.ressource.findUnique({
         where: { id: id },
         select: {
+          id: true,
           title: true,
           description: true,
           maxParticipant: true,
@@ -162,10 +166,24 @@ export class RessourceService {
           isValidate: true,
           status: true,
           file: {
-            select: { path: true },
+            select: { id: true, path: true },
           },
           step: {
-            select: { title: true, description: true, order: true },
+            select: { id: true, title: true, description: true, order: true },
+          },
+          comment: {
+            select: {
+              title: true,
+              description: true,
+              id: true,
+              updatedAt: true,
+              citizen: {
+                select: {
+                  name: true,
+                  surname: true,
+                },
+              },
+            },
           },
         },
       });
@@ -192,6 +210,7 @@ export class RessourceService {
         data: updateRessourceDto,
         where: { id: id },
         select: {
+          id: true,
           title: true,
           description: true,
           maxParticipant: true,
@@ -200,7 +219,7 @@ export class RessourceService {
           isValidate: true,
           status: true,
           file: {
-            select: { path: true },
+            select: { id: true, path: true },
           },
         },
       });

@@ -17,6 +17,7 @@ export class CategoryService {
       const category = await this.prisma.category.create({
         data: createCategoryDto,
         select: {
+          id: true,
           name: true,
           description: true,
         },
@@ -48,10 +49,7 @@ export class CategoryService {
   async findAll() {
     try {
       const categories = await this.prisma.category.findMany({
-        select: {
-          name: true,
-          description: true,
-        },
+        select: { id: true, name: true, description: true },
       });
 
       if (!categories || categories.length === 0) {
@@ -79,10 +77,7 @@ export class CategoryService {
     try {
       const category = await this.prisma.category.findUnique({
         where: { id: id },
-        select: {
-          name: true,
-          description: true,
-        },
+        select: { id: true, name: true, description: true },
       });
 
       if (!category) {
@@ -106,10 +101,7 @@ export class CategoryService {
       const category = await this.prisma.category.update({
         data: updateCategoryDto,
         where: { id: id },
-        select: {
-          name: true,
-          description: true,
-        },
+        select: { id: true, name: true, description: true },
       });
 
       if (!category) {

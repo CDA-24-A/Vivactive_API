@@ -24,8 +24,8 @@ model Citizen {
   roleId String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
-  Comment Comment[]
-    messages Message[]
+  comment Comment[]
+  messages Message[]
   progression Progression[]
   favorites Favorite[]
 }
@@ -54,6 +54,7 @@ model Ressource {
   bannerId       String?
   step           Step[]
   favorites      Favorite[]
+  comment        Comment[]
   isValidate     Boolean
   status         String
   createdAt      DateTime @default(now())
@@ -63,7 +64,7 @@ model Ressource {
 model Category {
   id  String  @id @default(uuid())
   name String @unique
-  description String @unique
+  description String 
   ressources Ressource[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
@@ -87,6 +88,8 @@ model Comment {
   description String
   citizen Citizen @relation(fields: [citizenId], references: [id])
   citizenId String
+  ressource Ressource @relation(fields:[ressourceId], references :[id])
+  ressourceId String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
 }

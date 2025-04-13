@@ -31,24 +31,19 @@ export interface CommentType
   >;
 }
 
-export interface InviteType
-  extends Omit<CommentModel, 'id' | 'citizenId' | 'updatedAt'> {
-  citizen: Omit<CitizenType,
-  | 'role'
-  | 'createdAt'
-  | 'updatedAt'
-  | 'password'
-  | 'roleId'
-  | 'email'
-  | 'id'
-  | 'Comment'
-  | 'name'
-  | 'surname'
-  | 'messages'
-  | 'receivedInvites'
-  | 'sentInvites'
->;
+export interface InviteType {
+  accept: boolean;
+  createdAt: Date;
+  sender: {
+    name: string;
+    surname: string;
+  };
+  recever: {
+    name: string;
+    surname: string;
+  };
 }
+
 
 export interface MessageType
   extends Omit<CommentModel, 'id' | 'citizenId' | 'updatedAt'> {

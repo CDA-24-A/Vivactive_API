@@ -25,21 +25,9 @@ export class InviteController {
     return this.InviteService.create(createInviteDto);
   }
 
-  @Get()
-  findAll(
-    @Query('citizenId') citizenId: string | undefined,
-  ): Promise<ApiReturns<InviteType[] | null>> {
-    return this.InviteService.findAll(citizenId);
-  }
-
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.InviteService.findOne(id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateInviteDto: UpdateInviteDto) {
-    return this.InviteService.update(id, updateInviteDto);
   }
 
   @Delete(':id')

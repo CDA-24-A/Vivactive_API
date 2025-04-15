@@ -15,6 +15,14 @@ export class MessageService {
               title: true,
               description: true,
               createdAt: true,
+              ressourceId: true, 
+              citizenId: true,
+              ressource: {
+                select: {
+                  title: true,
+    
+                },
+              },
               citizen: {
                 select: {
                   name: true,
@@ -55,6 +63,14 @@ export class MessageService {
           title: true,
           description: true,
           createdAt: true,
+          ressourceId: true, 
+          citizenId: true,    
+          ressource: {
+            select: {
+              title: true,
+
+            },
+          },
           citizen: {
             select: {
               name: true,
@@ -93,6 +109,12 @@ export class MessageService {
           title: true,
           description: true,
           createdAt: true,
+          ressource: {
+            select: {
+              title: true,
+
+            },
+          },
           citizen: {
             select: {
               name: true,
@@ -128,6 +150,13 @@ export class MessageService {
               title: true,
               description: true,
               createdAt: true,
+              
+              ressource: {
+                select: {
+                  title: true,
+    
+                },
+              },
               citizen: {
                 select: {
                   name: true,

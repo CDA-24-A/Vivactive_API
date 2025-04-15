@@ -28,6 +28,21 @@ model Citizen {
     messages Message[]
 }
 
+model Ressource {
+  id             String   @id @default(uuid())
+  title          String
+  description    String
+  maxParticipant Int?     
+  nbParticipant  Int?     
+  deadLine       DateTime?
+  message        Message[]
+  comment        Comment[]
+  isValidate     Boolean
+  status         String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
 model Role {
   id  String  @id @default(uuid())
   name String @unique
@@ -42,6 +57,8 @@ model Comment {
   description String
   citizen Citizen @relation(fields: [citizenId], references: [id])
   citizenId String
+  ressource Ressource @relation(fields:[ressourceId], references :[id])
+  ressourceId String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
 }
@@ -52,6 +69,8 @@ model Message {
   title String
   description String
   citizen Citizen @relation(fields: [citizenId], references: [id])
+  ressource Ressource @relation(fields:[ressourceId], references :[id])
+  ressourceId String
   citizenId String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())

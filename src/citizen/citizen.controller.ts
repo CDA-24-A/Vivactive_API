@@ -9,7 +9,10 @@ import {
   Query,
 } from '@nestjs/common';
 import { CitizenService } from './citizen.service';
-import { CreateCitizenDto } from './dto/create-citizen.dto';
+import {
+  CreateCitizenDto,
+  CreateCitizenwithClerkDTo,
+} from './dto/create-citizen.dto';
 import {
   UpdateCitizenCredentialsDto,
   UpdateCitizenDto,
@@ -21,6 +24,13 @@ import { CitizenType } from 'src/utils/types/PrismaApiModel.type';
 @Controller('citizen')
 export class CitizenController {
   constructor(private citizenService: CitizenService) {}
+
+  @Post('clerk')
+  createWithClerk(
+    @Body() createCitizenDto: CreateCitizenwithClerkDTo,
+  ): Promise<ApiReturns<CitizenType | null>> {
+    return this.citizenService.createWithClerk(createCitizenDto);
+  }
 
   @Post()
   create(
@@ -47,6 +57,13 @@ export class CitizenController {
       orderBy,
       sortBy,
     );
+  }
+
+  @Get('clerk/:id')
+  findOneFromClerk(
+    @Param('id') clerkId: string,
+  ): Promise<ApiReturns<CitizenType | null>> {
+    return this.citizenService.findOneFromClerk(clerkId);
   }
 
   @Get(':id')

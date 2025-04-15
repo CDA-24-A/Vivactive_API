@@ -18,6 +18,10 @@ export class CreateCitizenDto {
   password: string;
 
   @IsNotEmpty()
-  @IsOptional()
   roleId: string;
+}
+
+export class CreateCitizenwithClerkDTo {
+  @IsNotEmpty()
+  clerkId: string;
 }

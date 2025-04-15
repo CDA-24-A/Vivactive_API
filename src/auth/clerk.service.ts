@@ -5,7 +5,10 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { clerkClient } from '@clerk/clerk-sdk-node';
-import { CreateCitizenDto } from 'src/citizen/dto/create-citizen.dto';
+import {
+  CreateCitizenDto,
+  CreateCitizenwithClerkDTo,
+} from 'src/citizen/dto/create-citizen.dto';
 import {
   UpdateCitizenCredentialsDto,
   UpdateCitizenDto,
@@ -70,7 +73,7 @@ export class ClerkService {
     }
   }
 
-  async getClerkUser(citizenData: CreateCitizenDto) {
+  async getClerkUser(citizenData: CreateCitizenwithClerkDTo) {
     if (!citizenData.clerkId) {
       return undefined;
     }

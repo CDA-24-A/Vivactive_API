@@ -6,7 +6,10 @@ import {
   ForbiddenException,
   BadRequestException,
 } from '@nestjs/common';
-import { CreateCitizenDto } from './dto/create-citizen.dto';
+import {
+  CreateCitizenDto,
+  CreateCitizenwithClerkDTo,
+} from './dto/create-citizen.dto';
 import {
   UpdateCitizenCredentialsDto,
   UpdateCitizenDto,
@@ -27,8 +30,6 @@ export class CitizenService {
       let clerkUser: User | undefined;
 
       clerkUser = await this.clerkService.getClerkUser(createCitizenDto);
-
-      console.log(clerkUser);
 
       if (!clerkUser) {
         clerkUser = await this.clerkService.createClerkUser(createCitizenDto);
@@ -69,6 +70,76 @@ export class CitizenService {
 
       return { data: citizen, message: 'Citoyen créé avec succès' };
     } catch (error) {
+      console.error(error);
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
+
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+
+      if (error instanceof InternalServerErrorException) {
+        throw error;
+      }
+      if (error.code === 'P2002') {
+        throw new BadRequestException(
+          'Une erreur de validation est survenue (données dupliquées)',
+        );
+      }
+      console.error(error);
+      throw new InternalServerErrorException(
+        'Une erreur inconnue est survenue',
+      );
+    }
+  }
+
+  async createWithClerk(createCitizenDto: CreateCitizenwithClerkDTo) {
+    try {
+      const clerkUser = await this.clerkService.getClerkUser(createCitizenDto);
+
+      if (!clerkUser) {
+        throw new NotFoundException(
+          "Utilisateur introuvable, vérifié l'inscription sur Clerk",
+        );
+      }
+
+      const defaultRoleId = await this.prisma.role.findUnique({
+        where: { name: 'USER' },
+        select: {
+          id: true,
+        },
+      });
+
+      const newUser = {
+        name: clerkUser.firstName || '',
+        surname: clerkUser.lastName || '',
+        email: clerkUser.emailAddresses[0].emailAddress,
+        roleId: defaultRoleId?.id || 'null',
+        clerkId: clerkUser.id,
+      };
+
+      const citizen = await this.prisma.citizen.create({
+        data: newUser,
+        select: {
+          email: true,
+          name: true,
+          surname: true,
+          role: {
+            select: { id: true, name: true },
+          },
+        },
+      });
+
+      if (!citizen) {
+        throw new InternalServerErrorException(
+          `Une erreur est survenue lors de la création du citoyen`,
+        );
+      }
+
+      return { data: citizen, message: 'Citoyen créé avec succès' };
+    } catch (error) {
+      console.error(error);
       if (error instanceof BadRequestException) {
         throw error;
       }
@@ -174,6 +245,37 @@ export class CitizenService {
       const citizen = await this.prisma.citizen.findUnique({
         where: { id: id },
         select: {
+          email: true,
+          name: true,
+          surname: true,
+          role: {
+            select: { id: true, name: true },
+          },
+        },
+      });
+
+      if (!citizen) {
+        throw new NotFoundException('Citoyen non trouvé');
+      }
+
+      return { data: citizen, message: 'Citoyen récupéré avec succès' };
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      console.error(error);
+      throw new InternalServerErrorException(
+        'Une erreur inconnue est survenue',
+      );
+    }
+  }
+
+  async findOneFromClerk(clerkId: string) {
+    try {
+      const citizen = await this.prisma.citizen.findUnique({
+        where: { clerkId: clerkId },
+        select: {
+          id: true,
           email: true,
           name: true,
           surname: true,

@@ -25,35 +25,45 @@ export class ProgressionService {
       throw new NotFoundException('Aucune étapes trouvées');
     }
 
-    for (const step of steps) {
-      const existingProgression = await this.prisma.progression.findFirst({
-        where: { citizenId, stepId: step.id },
-      });
+    const isAlreadyInAProgression = await this.prisma.progression.findFirst({
+      where: { citizenId },
+    });
 
-      if (!existingProgression) {
-        const progression = await this.prisma.progression.create({
-          data: {
-            citizenId,
-            stepId: step.id,
-            completed: false,
-          },
+    if (isAlreadyInAProgression === null) {
+      for (const step of steps) {
+        const existingProgression = await this.prisma.progression.findFirst({
+          where: { citizenId, stepId: step.id, completed: false },
         });
-        initializerProgression.push(progression);
-      } else {
-        throw new BadRequestException(
-          'Une erreur de validation est survenue (données dupliquées)',
+
+        if (!existingProgression) {
+          const progression = await this.prisma.progression.create({
+            data: {
+              citizenId,
+              stepId: step.id,
+              completed: false,
+            },
+          });
+          initializerProgression.push(progression);
+        } else {
+          throw new BadRequestException(
+            'Une erreur de validation est survenue (données dupliquées)',
+          );
+        }
+      }
+      if (initializerProgression.length === 0) {
+        throw new InternalServerErrorException(
+          "Une erreur est survenue durant l'initilisation de la progression",
         );
       }
-    }
-    if (initializerProgression.length === 0) {
-      throw new InternalServerErrorException(
-        "Une erreur est survenue durant l'initilisation de la progression",
+      return {
+        data: initializerProgression,
+        message: 'Progression initialisé avec succès',
+      };
+    } else {
+      throw new BadRequestException(
+        'Ce citoyen est déjà inscris à une ressource',
       );
     }
-    return {
-      data: initializerProgression,
-      message: 'Progression initialisé avec succès',
-    };
   }
 
   async getProgression(citizenId: string, ressourceId: string) {
@@ -144,6 +154,48 @@ export class ProgressionService {
           'Une erreur de validation est survenue (données dupliquées)',
         );
       }
+      console.error(error);
+      throw new InternalServerErrorException(
+        'Une erreur inconnue est survenue',
+      );
+    }
+  }
+
+  async deleteProgression(citizenId: string, ressourceId: string) {
+    if (!citizenId || !ressourceId) {
+      throw new BadRequestException(
+        'Veuillez renseigner le citizen et la ressource',
+      );
+    }
+    try {
+      const progression = await this.prisma.progression.deleteMany({
+        where: {
+          citizenId,
+          step: {
+            ressourceId,
+          },
+        },
+      });
+
+      return {
+        data: progression,
+        message: 'Progression supprimé avec succès',
+      };
+    } catch (error) {
+      if (error.code === 'P2002') {
+        throw new BadRequestException(
+          'Une erreur de validation est survenue (données dupliquées)',
+        );
+      }
+      //------Permet de bien renvoyer les erreurs de initializeProgression si il y en a
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
+
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      //-----------------------//
       console.error(error);
       throw new InternalServerErrorException(
         'Une erreur inconnue est survenue',

@@ -42,6 +42,16 @@ export class ProgressionController {
     await this.progressionService.deleteProgressionForExpiredRessources();
     return { message: 'Progression expirées supprimées avec succès' };
   }
+  @Delete()
+  async deleteProgression(
+    @Query('citizenId') citizenId: string,
+    @Query('ressourceId') ressourceId: string,
+  ) {
+    return await this.progressionService.deleteProgression(
+      citizenId,
+      ressourceId,
+    );
+  }
 
   @Cron('0 0 * * *') // S'exécute tous les jours à minuit
   async handleCron() {

@@ -9,6 +9,7 @@ import {
 import { CreateRessourceDto } from './dto/create-Ressource.dto';
 import { UpdateRessourceDto } from './dto/update-Ressource.dto';
 import { PrismaService } from 'src/prisma.service';
+import { RessourceStatus } from 'src/utils/ressourceStatus.enum';
 
 @Injectable()
 export class RessourceService {
@@ -16,25 +17,20 @@ export class RessourceService {
 
   async create(createRessourceDto: CreateRessourceDto) {
     try {
-      const {
-        fileBytes,
-        bannerBytes,
-        ...ressourceData
-      } = createRessourceDto;
-  
-      // ➕ Ici on indique les bons types explicitement
+      const { fileBytes, bannerBytes, ...ressourceData } = createRessourceDto;
+
       let file: { id: string } | null = null;
       let banner: { id: string } | null = null;
-  
+
       if (fileBytes) {
         file = await this.prisma.file.create({
           data: {
             path: Buffer.from(fileBytes, 'base64'),
           },
-          select: { id: true }, // ⚠️ On sélectionne seulement l'id, sinon on a un objet trop gros
+          select: { id: true },
         });
       }
-  
+
       if (bannerBytes) {
         banner = await this.prisma.image.create({
           data: {
@@ -43,12 +39,13 @@ export class RessourceService {
           select: { id: true },
         });
       }
-  
+
       const Ressource = await this.prisma.ressource.create({
         data: {
           ...ressourceData,
           fileId: file?.id,
           bannerId: banner?.id,
+          status: ressourceData.status || RessourceStatus.EN_ATTENTE,
         },
         select: {
           id: true,
@@ -73,7 +70,7 @@ export class RessourceService {
           },
         },
       });
-  
+
       return { data: Ressource, message: 'Ressources créé avec succès' };
     } catch (error) {
       if (error.code === 'P2002') {
@@ -87,7 +84,6 @@ export class RessourceService {
       );
     }
   }
-  
 
   async findAll(
     page: number = 1,

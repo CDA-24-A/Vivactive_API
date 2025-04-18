@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { StepService } from './step.service';
 import { CreateStepDto } from './dto/create-step.dto';
@@ -22,6 +23,13 @@ export class StepController {
     @Body() createStepDto: CreateStepDto,
   ): Promise<ApiReturns<StepModel | null>> {
     return this.stepService.create(createStepDto);
+  }
+
+  @Get('ressource')
+  findAllFromRessource(
+    @Query('ressourceId') ressourceId: string,
+  ): Promise<ApiReturns<StepModel[] | null>> {
+    return this.stepService.findAllFromRessource(ressourceId);
   }
 
   @Get()

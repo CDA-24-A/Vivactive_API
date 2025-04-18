@@ -64,7 +64,7 @@ export class RessourceService {
             select: { path: true, id: true },
           },
           category: {
-            select: { name: true, id: true, description: true },
+            select: { name: true, id: true, description: true},
           },
           banner: {
             select: { url: true },

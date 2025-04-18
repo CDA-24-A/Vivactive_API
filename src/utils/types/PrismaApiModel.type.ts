@@ -14,7 +14,7 @@ import {
 export interface CitizenType
   extends Omit<
     CitizenModel,
-    'id' | 'password' | 'roleId' | 'createdAt' | 'updatedAt' | 'clerkId'
+    'password' | 'roleId' | 'createdAt' | 'updatedAt' | 'clerkId'
   > {
   role: Omit<RoleModel, 'createdAt' | 'updatedAt'>;
 }

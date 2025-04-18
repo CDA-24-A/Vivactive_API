@@ -5,18 +5,17 @@ export class UpdateCitizenDto {
   clerkId: string;
 
   @IsNotEmpty()
+  id: string;
+
   @IsOptional()
   name: string;
 
-  @IsNotEmpty()
   @IsOptional()
   surname: string;
 
-  @IsNotEmpty()
   @IsOptional()
   email: string;
 
-  @IsNotEmpty()
   @IsOptional()
   roleId: string;
 }

@@ -32,7 +32,7 @@ export class ProgressionService {
     if (isAlreadyInAProgression === null) {
       for (const step of steps) {
         const existingProgression = await this.prisma.progression.findFirst({
-          where: { citizenId, stepId: step.id, completed: false },
+          where: { citizenId, stepId: step.id, completed: false, ressourceId },
         });
 
         if (!existingProgression) {
@@ -41,6 +41,7 @@ export class ProgressionService {
               citizenId,
               stepId: step.id,
               completed: false,
+              ressourceId: ressourceId,
             },
           });
           initializerProgression.push(progression);
@@ -66,24 +67,19 @@ export class ProgressionService {
     }
   }
 
-  async getProgression(citizenId: string, ressourceId: string) {
-    if (!citizenId || !ressourceId) {
-      throw new BadRequestException(
-        'Veuillez renseigner le citizen et la ressource',
-      );
+  async getProgression(citizenId: string) {
+    if (!citizenId) {
+      throw new BadRequestException('Veuillez renseigner le citizen ');
     }
     try {
-      await this.initializeProgression({
-        citizenId,
-        ressourceId,
-      });
+      // await this.initializeProgression({
+      //   citizenId,
+      //   ressourceId,
+      // });
 
       const progression = await this.prisma.progression.findMany({
         where: {
           citizenId,
-          step: {
-            ressourceId,
-          },
         },
         include: {
           step: true,
@@ -161,19 +157,14 @@ export class ProgressionService {
     }
   }
 
-  async deleteProgression(citizenId: string, ressourceId: string) {
-    if (!citizenId || !ressourceId) {
-      throw new BadRequestException(
-        'Veuillez renseigner le citizen et la ressource',
-      );
+  async deleteProgression(citizenId: string) {
+    if (!citizenId) {
+      throw new BadRequestException('Veuillez renseigner le citizen ');
     }
     try {
       const progression = await this.prisma.progression.deleteMany({
         where: {
           citizenId,
-          step: {
-            ressourceId,
-          },
         },
       });
 

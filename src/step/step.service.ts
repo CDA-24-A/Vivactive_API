@@ -80,6 +80,38 @@ export class StepService {
     }
   }
 
+  async findAllFromRessource(ressourceId: string) {
+    try {
+      const steps = await this.prisma.step.findMany({
+        where: { ressourceId },
+        select: {
+          id: true,
+          title: true,
+          description: true,
+          order: true,
+          ressourceId: true,
+        },
+      });
+
+      if (!steps || steps.length === 0) {
+        throw new NotFoundException('Aucune étape trouvée');
+      }
+
+      return {
+        data: steps,
+        message: 'Etapes récupérés avec succès',
+      };
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      console.error(error);
+      throw new InternalServerErrorException(
+        'Une erreur inconnue est survenue',
+      );
+    }
+  }
+
   async findOne(id: string) {
     try {
       const step = await this.prisma.step.findUnique({

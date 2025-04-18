@@ -18,11 +18,8 @@ export class ProgressionController {
   constructor(private readonly progressionService: ProgressionService) {}
 
   @Get()
-  async getProgression(
-    @Query('citizenId') citizenId: string,
-    @Query('ressourceId') ressourceId: string,
-  ) {
-    return this.progressionService.getProgression(citizenId, ressourceId);
+  async getProgression(@Query('citizenId') citizenId: string) {
+    return this.progressionService.getProgression(citizenId);
   }
 
   @Post()
@@ -43,14 +40,8 @@ export class ProgressionController {
     return { message: 'Progression expirées supprimées avec succès' };
   }
   @Delete()
-  async deleteProgression(
-    @Query('citizenId') citizenId: string,
-    @Query('ressourceId') ressourceId: string,
-  ) {
-    return await this.progressionService.deleteProgression(
-      citizenId,
-      ressourceId,
-    );
+  async deleteProgression(@Query('citizenId') citizenId: string) {
+    return await this.progressionService.deleteProgression(citizenId);
   }
 
   @Cron('0 0 * * *') // S'exécute tous les jours à minuit

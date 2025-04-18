@@ -49,6 +49,7 @@ export class RessourceService {
           ...ressourceData,
           fileId: file?.id,
           bannerId: banner?.id,
+          
         },
         select: {
           id: true,
@@ -71,6 +72,9 @@ export class RessourceService {
           step: {
             select: { id: true, title: true, description: true, order: true },
           },
+          ressourceType: {
+            select: { id: true, name: true },
+          }
         },
       });
   
@@ -148,6 +152,9 @@ export class RessourceService {
           category: {
             select: { name: true, id: true, description: true },
           },
+          ressourceType: {
+            select: { id: true, name: true },
+          }
         },
       });
 
@@ -210,6 +217,9 @@ export class RessourceService {
           category: {
             select: { name: true, id: true, description: true },
           },
+          ressourceType: {
+            select: { id: true, name: true },
+          }
         },
       });
 
@@ -249,6 +259,9 @@ export class RessourceService {
           category: {
             select: { name: true, id: true, description: true },
           },
+          ressourceType: {
+            select: { id: true, name: true },
+          }
         },
       });
 

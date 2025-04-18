@@ -32,6 +32,8 @@ export interface RessourceType
     | 'bannerId'
     | 'file'
     | 'comment'
+    | 'ressourceTypeId'
+    | 'ressourceType'
   > {
   file?: Omit<FileModel, 'resources'> | null;
   step: Array<Omit<StepModel, 'ressourceId'> | null>;

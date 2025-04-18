@@ -14,6 +14,7 @@ export class RessourceTypeService {
             data: ressourceTypeData,
             select: {
               name: true,
+              id: true,
             },
           });
     
@@ -57,6 +58,7 @@ export class RessourceTypeService {
             where: { id: id },
             select: {
               name: true,
+              id: true,
             },
           });
     
@@ -81,7 +83,12 @@ export class RessourceTypeService {
 
   async findAll() {
     try {
-      let ressourceTypes = await this.prisma.ressourceType.findMany();
+      let ressourceTypes = await this.prisma.ressourceType.findMany({
+        select: {
+          id: true,
+          name: true,
+        },
+      });
 
       if (!ressourceTypes) {
         throw new NotFoundException('Aucun type de ressource trouvé');
@@ -104,7 +111,7 @@ export class RessourceTypeService {
 
   async findOne(id: string) {
     try {
-      const resourceType = await this.prisma.ressourceType.findUnique({ where: { id } });
+      const resourceType = await this.prisma.ressourceType.findUnique({ where: { id }, select: { id: true, name: true } });
       if (!resourceType) {
         throw new NotFoundException(`RessourceType with id ${id} not found`);
       }

@@ -57,8 +57,8 @@ model Ressource {
   comment        Comment[]
   isValidate     Boolean
   status         String
-  ressourceType   RessourceType @relation(fields: [resourceTypeId], references: [id])
-  resourceTypeId String
+  ressourceType   RessourceType @relation(fields: [ressourceTypeId], references: [id])
+  ressourceTypeId String
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 }

@@ -21,7 +21,7 @@
     "prisma": "npx prisma migrate dev npx prisma db seed"
   },
   "prisma": {
-    "seed": "ts-node prisma/seed.ts"
+    "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
     "@clerk/clerk-sdk-node": "^5.1.6",
@@ -66,6 +66,7 @@
     "ts-loader": "^9.5.2",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
+    "tsx": "^4.19.3",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.23.0"
   },

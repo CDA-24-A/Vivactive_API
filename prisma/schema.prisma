@@ -65,7 +65,7 @@ model Ressource {
 
 model Category {
   id  String  @id @default(uuid())
-  name String @unique
+  name String 
   description String 
   ressources Ressource[]
   createdAt DateTime @default(now())

@@ -284,11 +284,50 @@ export class RessourceService {
     }
   }
 
+  async validateRessource(id: string) {
+    try {
+      const Ressource = await this.prisma.ressource.update({
+        data: { isValidate: true },
+        where: { id: id },
+        select: {
+          id: true,
+          title: true,
+          description: true,
+          maxParticipant: true,
+          nbParticipant: true,
+          deadLine: true,
+          isValidate: true,
+          status: true,
+          file: {
+            select: { id: true, path: true },
+          },
+        },
+      });
+
+      if (!Ressource) {
+        throw new NotFoundException('Ressource non trouvé pour la mise à jour');
+      }
+
+      return { data: Ressource, message: 'Ressources mis à jour avec succès' };
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      if (error.code === 'P2002') {
+        throw new BadRequestException('Contrainte violée : donnée dupliquée');
+      }
+      console.error(error);
+      throw new InternalServerErrorException(
+        'Une erreur inconnue est survenue',
+      );
+    }
+  }
+
   async isRessourceInProgress(ressourceId: string): Promise<boolean> {
     const ressource = await this.prisma.ressource.findUnique({
       where: { id: ressourceId },
     });
 
-    return ressource?.status === 'En cours';
+    return ressource?.status === RessourceStatus.EN_COURS;
   }
 }

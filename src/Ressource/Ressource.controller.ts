@@ -56,6 +56,13 @@ export class RessourceController {
     return this.RessourceService.findOne(id);
   }
 
+  @Patch('/validate/:id')
+  validate(
+    @Param('id') id: string,
+  ): Promise<ApiReturns<Omit<RessourceType, 'step'>>> {
+    return this.RessourceService.validateRessource(id);
+  }
+
   @Patch(':id')
   update(
     @Param('id') id: string,

@@ -1,4 +1,11 @@
-import { IsNotEmpty, IsOptional, IsInt, IsBoolean, IsDateString, IsString } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsOptional,
+  IsInt,
+  IsBoolean,
+  IsDateString,
+  IsString,
+} from 'class-validator';
 
 export class CreateRessourceDto {
   @IsNotEmpty()
@@ -29,7 +36,6 @@ export class CreateRessourceDto {
   @IsOptional()
   status: string;
 
-  // ➕ Nouveaux champs : les images en base64 ou bytes
   @IsOptional()
   @IsString()
   fileBytes?: string;

@@ -9,6 +9,7 @@ import {
 import { CreateRessourceDto } from './dto/create-Ressource.dto';
 import { UpdateRessourceDto } from './dto/update-Ressource.dto';
 import { PrismaService } from 'src/prisma.service';
+import { RessourceStatus } from 'src/utils/ressourceStatus.enum';
 
 @Injectable()
 export class RessourceService {
@@ -18,7 +19,6 @@ export class RessourceService {
     try {
       const { fileBytes, bannerBytes, ...ressourceData } = createRessourceDto;
 
-      // ➕ Ici on indique les bons types explicitement
       let file: { id: string } | null = null;
       let banner: { id: string } | null = null;
 
@@ -27,7 +27,7 @@ export class RessourceService {
           data: {
             path: Buffer.from(fileBytes, 'base64'),
           },
-          select: { id: true }, // ⚠️ On sélectionne seulement l'id, sinon on a un objet trop gros
+          select: { id: true },
         });
       }
 
@@ -45,6 +45,7 @@ export class RessourceService {
           ...ressourceData,
           fileId: file?.id,
           bannerId: banner?.id,
+          status: ressourceData.status || RessourceStatus.EN_ATTENTE,
         },
         select: {
           id: true,

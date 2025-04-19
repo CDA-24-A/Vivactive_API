@@ -1,5 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { createCitizen } from './data/citizen';
+import { generateRessourcesSeed } from './data/resssource';
+import { categories } from './data/categories';
 
 const prisma = new PrismaClient();
 
@@ -28,6 +30,21 @@ async function main() {
   });
 
   void createCitizen([admin, moderator, user]);
+
+  await prisma.category.createMany({
+    data: categories,
+  });
+
+  console.log('Les catégories ont été insérées avec succès !');
+
+  const ressources = generateRessourcesSeed(categories.map((cat) => cat.id));
+
+  // Insérer les ressources dans la base de données
+  await prisma.ressource.createMany({
+    data: ressources,
+  });
+
+  console.log('Les ressources ont été insérées avec succès !');
 }
 main()
   .then(async () => {

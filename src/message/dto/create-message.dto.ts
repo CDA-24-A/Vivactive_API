@@ -2,8 +2,11 @@ import { IsNotEmpty } from 'class-validator';
 
 export class CreateMessageDto {
   @IsNotEmpty()
-  title: string;
+  message: string;
+
   @IsNotEmpty()
-  description: string;
   citizenId: string;
+
+  @IsNotEmpty()
+  ressourceId: string;
 }

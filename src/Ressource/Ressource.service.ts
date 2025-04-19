@@ -16,16 +16,12 @@ export class RessourceService {
 
   async create(createRessourceDto: CreateRessourceDto) {
     try {
-      const {
-        fileBytes,
-        bannerBytes,
-        ...ressourceData
-      } = createRessourceDto;
-  
+      const { fileBytes, bannerBytes, ...ressourceData } = createRessourceDto;
+
       // ➕ Ici on indique les bons types explicitement
       let file: { id: string } | null = null;
       let banner: { id: string } | null = null;
-  
+
       if (fileBytes) {
         file = await this.prisma.file.create({
           data: {
@@ -34,7 +30,7 @@ export class RessourceService {
           select: { id: true }, // ⚠️ On sélectionne seulement l'id, sinon on a un objet trop gros
         });
       }
-  
+
       if (bannerBytes) {
         banner = await this.prisma.image.create({
           data: {
@@ -43,7 +39,7 @@ export class RessourceService {
           select: { id: true },
         });
       }
-  
+
       const Ressource = await this.prisma.ressource.create({
         data: {
           ...ressourceData,
@@ -73,7 +69,7 @@ export class RessourceService {
           },
         },
       });
-  
+
       return { data: Ressource, message: 'Ressources créé avec succès' };
     } catch (error) {
       if (error.code === 'P2002') {
@@ -87,7 +83,6 @@ export class RessourceService {
       );
     }
   }
-  
 
   async findAll(
     page: number = 1,
@@ -286,5 +281,13 @@ export class RessourceService {
         'Une erreur inconnue est survenue lors de la suppression du citoyen',
       );
     }
+  }
+
+  async isRessourceInProgress(ressourceId: string): Promise<boolean> {
+    const ressource = await this.prisma.ressource.findUnique({
+      where: { id: ressourceId },
+    });
+
+    return ressource?.status === 'En cours';
   }
 }

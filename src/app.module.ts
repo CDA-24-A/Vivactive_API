@@ -23,7 +23,8 @@ import { MessageModule } from './message/message.module';
     ScheduleModule.forRoot(),
     CategoryModule,
     MessageModule,
-    FavoriteModule],
+    FavoriteModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

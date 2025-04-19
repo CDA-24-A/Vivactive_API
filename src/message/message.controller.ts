@@ -6,8 +6,6 @@ import {
   Patch,
   Param,
   Delete,
-  BadRequestException,
-  NotFoundException,
   Query,
 } from '@nestjs/common';
 import { MessageService } from './message.service';
@@ -16,23 +14,23 @@ import { UpdateMessageDto } from './dto/update-message.dto';
 import { ApiReturns } from 'src/utils/types/ApiReturns.type';
 import { MessageType } from 'src/utils/types/PrismaApiModel.type';
 
-@Controller('Message')
+@Controller('message')
 export class MessageController {
   constructor(private readonly MessageService: MessageService) {}
 
   @Post()
-  create(@Body() createMessageDto: CreateMessageDto) : Promise<ApiReturns<MessageType | null>> {
+  create(
+    @Body() createMessageDto: CreateMessageDto,
+  ): Promise<ApiReturns<MessageType | null>> {
     return this.MessageService.create(createMessageDto);
   }
 
   @Get()
-    findAll(
-      @Query('citizenId') citizenId: string | undefined,
-    ): Promise<ApiReturns<MessageType[] | null>> {
-      return this.MessageService.findAll(
-        citizenId
-      );
-    }
+  findAll(
+    @Query('citizenId') citizenId: string | undefined,
+  ): Promise<ApiReturns<MessageType[] | null>> {
+    return this.MessageService.findAll(citizenId);
+  }
 
   @Get(':id')
   findOne(@Param('id') id: string) {

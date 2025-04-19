@@ -229,4 +229,18 @@ export class ProgressionService {
       console.log('No expired ressources found.');
     }
   }
+
+  async hasProgression(
+    citizenId: string,
+    resourceId: string,
+  ): Promise<boolean> {
+    const progression = await this.prisma.progression.findFirst({
+      where: {
+        citizenId,
+        ressourceId: resourceId,
+      },
+    });
+
+    return !!progression;
+  }
 }

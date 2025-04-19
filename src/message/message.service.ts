@@ -8,18 +8,44 @@ import {
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
 import { PrismaService } from 'src/prisma.service';
+import { RessourceService } from 'src/Ressource/Ressource.service';
+import { ProgressionService } from 'src/progression/progression.service';
 
 @Injectable()
 export class MessageService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private ressourceService: RessourceService,
+    private progressionService: ProgressionService,
+  ) {}
   async create(createMessageDto: CreateMessageDto) {
     try {
+      const isInProgress = await this.ressourceService.isRessourceInProgress(
+        createMessageDto.ressourceId,
+      );
+
+      if (!isInProgress) {
+        throw new ForbiddenException(
+          "La ressource n'est pas en cours, la messagerie n'est pas possible.",
+        );
+      }
+
+      const hasProgression = await this.progressionService.hasProgression(
+        createMessageDto.citizenId,
+        createMessageDto.ressourceId,
+      );
+      if (!hasProgression) {
+        throw new ForbiddenException(
+          "Vous n'êtes pas inscrit à cette ressource. La messagerie est réservée aux inscrits.",
+        );
+      }
+
       const Message = await this.prisma.message.create({
         data: createMessageDto,
         select: {
-          title: true,
-          description: true,
-          createdAt: true,
+          message: true,
+          updatedAt: true,
+          ressourceId: true,
           citizen: {
             select: {
               name: true,
@@ -40,6 +66,9 @@ export class MessageService {
       if (error instanceof InternalServerErrorException) {
         throw error;
       }
+      if (error instanceof ForbiddenException) {
+        throw error;
+      }
       if (error.code === 'P2002') {
         throw new BadRequestException(
           'Une erreur de validation est survenue (données dupliquées)',
@@ -57,9 +86,9 @@ export class MessageService {
       const Messages = await this.prisma.message.findMany({
         where: { citizenId: citizenId },
         select: {
-          title: true,
-          description: true,
-          createdAt: true,
+          message: true,
+          updatedAt: true,
+          ressourceId: true,
           citizen: {
             select: {
               name: true,
@@ -95,9 +124,9 @@ export class MessageService {
       const Message = await this.prisma.message.findUnique({
         where: { id: id },
         select: {
-          title: true,
-          description: true,
-          createdAt: true,
+          message: true,
+          updatedAt: true,
+          ressourceId: true,
           citizen: {
             select: {
               name: true,
@@ -129,9 +158,9 @@ export class MessageService {
         data: updateMessageDto,
         where: { id: id },
         select: {
-          title: true,
-          description: true,
-          createdAt: true,
+          message: true,
+          updatedAt: true,
+          ressourceId: true,
           citizen: {
             select: {
               name: true,

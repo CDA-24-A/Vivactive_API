@@ -81,7 +81,7 @@ export type FavoriteType = Omit<
 >;
 
 export interface MessageType
-  extends Omit<MessageModel, 'id' | 'citizenId' | 'updatedAt'> {
+  extends Omit<MessageModel, 'id' | 'citizenId' | 'createdAt'> {
   citizen: Omit<
     CitizenType,
     | 'role'

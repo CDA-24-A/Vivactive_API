@@ -37,7 +37,9 @@ async function main() {
 
   console.log('Les catégories ont été insérées avec succès !');
 
-  const ressources = generateRessourcesSeed(categories.map((cat) => cat.id));
+  const bddCategories = await prisma.category.findMany();
+
+  const ressources = generateRessourcesSeed(bddCategories.map((cat) => cat.id));
 
   // Insérer les ressources dans la base de données
   await prisma.ressource.createMany({

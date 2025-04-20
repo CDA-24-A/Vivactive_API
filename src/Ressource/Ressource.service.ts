@@ -138,8 +138,8 @@ export class RessourceService {
           deadLine: true,
           isValidate: true,
           status: true,
-          file: {
-            select: { path: true, id: true },
+          banner: {
+            select: { id: true, url: true },
           },
         },
       });
@@ -182,6 +182,9 @@ export class RessourceService {
           status: true,
           file: {
             select: { id: true, path: true },
+          },
+          banner: {
+            select: { id: true, url: true },
           },
           step: {
             select: { id: true, title: true, description: true, order: true },
@@ -235,6 +238,9 @@ export class RessourceService {
           status: true,
           file: {
             select: { id: true, path: true },
+          },
+          banner: {
+            select: { id: true, url: true },
           },
         },
       });
@@ -300,6 +306,9 @@ export class RessourceService {
           status: true,
           file: {
             select: { id: true, path: true },
+          },
+          banner: {
+            select: { id: true, url: true },
           },
         },
       });

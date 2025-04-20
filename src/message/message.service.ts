@@ -43,6 +43,7 @@ export class MessageService {
       const Message = await this.prisma.message.create({
         data: createMessageDto,
         select: {
+          id: true,
           message: true,
           updatedAt: true,
           ressourceId: true,
@@ -86,6 +87,7 @@ export class MessageService {
       const Messages = await this.prisma.message.findMany({
         where: { citizenId: citizenId },
         select: {
+          id: true,
           message: true,
           updatedAt: true,
           ressourceId: true,
@@ -124,6 +126,7 @@ export class MessageService {
       const Message = await this.prisma.message.findUnique({
         where: { id: id },
         select: {
+          id: true,
           message: true,
           updatedAt: true,
           ressourceId: true,
@@ -158,6 +161,7 @@ export class MessageService {
         data: updateMessageDto,
         where: { id: id },
         select: {
+          id: true,
           message: true,
           updatedAt: true,
           ressourceId: true,

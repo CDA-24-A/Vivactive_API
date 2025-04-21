@@ -9,8 +9,14 @@ import {
   Query,
 } from '@nestjs/common';
 import { CitizenService } from './citizen.service';
-import { CreateCitizenDto } from './dto/create-citizen.dto';
-import { UpdateCitizenDto } from './dto/update-citizen.dto';
+import {
+  CreateCitizenDto,
+  CreateCitizenwithClerkDTo,
+} from './dto/create-citizen.dto';
+import {
+  UpdateCitizenCredentialsDto,
+  UpdateCitizenDto,
+} from './dto/update-citizen.dto';
 import { ApiReturns } from 'src/utils/types/ApiReturns.type';
 import { validatePagination } from 'src/utils/pageQueryhandeler';
 import { CitizenType } from 'src/utils/types/PrismaApiModel.type';
@@ -18,6 +24,13 @@ import { CitizenType } from 'src/utils/types/PrismaApiModel.type';
 @Controller('citizen')
 export class CitizenController {
   constructor(private citizenService: CitizenService) {}
+
+  @Post('clerk')
+  createWithClerk(
+    @Body() createCitizenDto: CreateCitizenwithClerkDTo,
+  ): Promise<ApiReturns<CitizenType | null>> {
+    return this.citizenService.createWithClerk(createCitizenDto);
+  }
 
   @Post()
   create(
@@ -46,9 +59,23 @@ export class CitizenController {
     );
   }
 
+  @Get('clerk/:id')
+  findOneFromClerk(
+    @Param('id') clerkId: string,
+  ): Promise<ApiReturns<CitizenType | null>> {
+    return this.citizenService.findOneFromClerk(clerkId);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string): Promise<ApiReturns<CitizenType | null>> {
     return this.citizenService.findOne(id);
+  }
+
+  @Patch('/credentials')
+  updateCredentials(
+    @Body() updateCitizenDto: UpdateCitizenCredentialsDto,
+  ): Promise<Record<'message', string>> {
+    return this.citizenService.updateCredentials(updateCitizenDto);
   }
 
   @Patch(':id')
@@ -60,7 +87,7 @@ export class CitizenController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string): Promise<String | { message: string }> {
+  remove(@Param('id') id: string): Promise<string | { message: string }> {
     return this.citizenService.remove(id);
   }
 }

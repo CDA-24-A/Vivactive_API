@@ -1,8 +1,9 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateCitizenDto } from './create-citizen.dto';
 import { IsNotEmpty, IsOptional } from 'class-validator';
 
 export class UpdateCitizenDto {
+  @IsNotEmpty()
+  clerkId: string;
+
   @IsNotEmpty()
   @IsOptional()
   name: string;
@@ -17,9 +18,10 @@ export class UpdateCitizenDto {
 
   @IsNotEmpty()
   @IsOptional()
-  password: string;
-
-  @IsNotEmpty()
-  @IsOptional()
   roleId: string;
+}
+
+export class UpdateCitizenCredentialsDto extends UpdateCitizenDto {
+  @IsNotEmpty()
+  password: string;
 }

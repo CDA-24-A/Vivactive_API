@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import {
   Injectable,
   NotFoundException,
@@ -5,44 +6,58 @@ import {
   ForbiddenException,
   BadRequestException,
 } from '@nestjs/common';
-import { CreateCitizenDto } from './dto/create-citizen.dto';
-import { UpdateCitizenDto } from './dto/update-citizen.dto';
+import {
+  CreateCitizenDto,
+  CreateCitizenwithClerkDTo,
+} from './dto/create-citizen.dto';
+import {
+  UpdateCitizenCredentialsDto,
+  UpdateCitizenDto,
+} from './dto/update-citizen.dto';
 import { PrismaService } from 'src/prisma.service';
-import * as bcrypt from 'bcrypt';
+import { ClerkService } from 'src/auth/clerk.service';
+import { User } from '@clerk/clerk-sdk-node';
 
 @Injectable()
 export class CitizenService {
-  constructor(private prisma: PrismaService) {}
-  private readonly saltRounds = 10;
-
-  private async hashingPassword(password: string): Promise<string> {
-    return bcrypt.hash(password, this.saltRounds);
-  }
-
-  // A mettre avec le auth
-  // async validatePassword(
-  //   plainPassword: string,
-  //   hashedPassword: string,
-  // ): Promise<boolean> {
-  //   return bcrypt.compare(plainPassword, hashedPassword);
-  // }
+  constructor(
+    private prisma: PrismaService,
+    private clerkService: ClerkService,
+  ) {}
 
   async create(createCitizenDto: CreateCitizenDto) {
     try {
-      const hashedPassword = await this.hashingPassword(
-        createCitizenDto.password,
-      );
+      let clerkUser: User | undefined;
 
-      const citizenData = { ...createCitizenDto, password: hashedPassword };
+      clerkUser = await this.clerkService.getClerkUser(createCitizenDto);
+
+      if (!clerkUser) {
+        clerkUser = await this.clerkService.createClerkUser(createCitizenDto);
+      }
+
+      const defaultRoleId = await this.prisma.role.findUnique({
+        where: { name: 'USER' },
+        select: {
+          id: true,
+        },
+      });
+
+      const newUser = {
+        name: clerkUser.firstName || '',
+        surname: clerkUser.lastName || '',
+        email: clerkUser.emailAddresses[0].emailAddress,
+        roleId: createCitizenDto.roleId || defaultRoleId?.id || 'null',
+        clerkId: clerkUser.id,
+      };
 
       const citizen = await this.prisma.citizen.create({
-        data: citizenData,
+        data: newUser,
         select: {
           email: true,
           name: true,
           surname: true,
           role: {
-            select: { name: true },
+            select: { id: true, name: true },
           },
         },
       });
@@ -55,6 +70,84 @@ export class CitizenService {
 
       return { data: citizen, message: 'Citoyen créé avec succès' };
     } catch (error) {
+      console.error(error);
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
+
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+
+      if (error instanceof InternalServerErrorException) {
+        throw error;
+      }
+      if (error.code === 'P2002') {
+        throw new BadRequestException(
+          'Une erreur de validation est survenue (données dupliquées)',
+        );
+      }
+      console.error(error);
+      throw new InternalServerErrorException(
+        'Une erreur inconnue est survenue',
+      );
+    }
+  }
+
+  async createWithClerk(createCitizenDto: CreateCitizenwithClerkDTo) {
+    try {
+      const clerkUser = await this.clerkService.getClerkUser(createCitizenDto);
+
+      if (!clerkUser) {
+        throw new NotFoundException(
+          "Utilisateur introuvable, vérifié l'inscription sur Clerk",
+        );
+      }
+
+      const defaultRoleId = await this.prisma.role.findUnique({
+        where: { name: 'USER' },
+        select: {
+          id: true,
+        },
+      });
+
+      const newUser = {
+        name: clerkUser.firstName || '',
+        surname: clerkUser.lastName || '',
+        email: clerkUser.emailAddresses[0].emailAddress,
+        roleId: defaultRoleId?.id || 'null',
+        clerkId: clerkUser.id,
+      };
+
+      const citizen = await this.prisma.citizen.create({
+        data: newUser,
+        select: {
+          email: true,
+          name: true,
+          surname: true,
+          role: {
+            select: { id: true, name: true },
+          },
+        },
+      });
+
+      if (!citizen) {
+        throw new InternalServerErrorException(
+          `Une erreur est survenue lors de la création du citoyen`,
+        );
+      }
+
+      return { data: citizen, message: 'Citoyen créé avec succès' };
+    } catch (error) {
+      console.error(error);
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
+
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+
       if (error instanceof InternalServerErrorException) {
         throw error;
       }
@@ -119,7 +212,7 @@ export class CitizenService {
           name: true,
           surname: true,
           role: {
-            select: { name: true },
+            select: { id: true, name: true },
           },
         },
       });
@@ -156,7 +249,38 @@ export class CitizenService {
           name: true,
           surname: true,
           role: {
-            select: { name: true },
+            select: { id: true, name: true },
+          },
+        },
+      });
+
+      if (!citizen) {
+        throw new NotFoundException('Citoyen non trouvé');
+      }
+
+      return { data: citizen, message: 'Citoyen récupéré avec succès' };
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      console.error(error);
+      throw new InternalServerErrorException(
+        'Une erreur inconnue est survenue',
+      );
+    }
+  }
+
+  async findOneFromClerk(clerkId: string) {
+    try {
+      const citizen = await this.prisma.citizen.findUnique({
+        where: { clerkId: clerkId },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          surname: true,
+          role: {
+            select: { id: true, name: true },
           },
         },
       });
@@ -179,14 +303,12 @@ export class CitizenService {
 
   async update(id: string, updateCitizenDto: UpdateCitizenDto) {
     try {
-      let citizenData = updateCitizenDto;
+      const citizenData = updateCitizenDto;
 
-      if (updateCitizenDto.password) {
-        const hashedPassword = await this.hashingPassword(
-          updateCitizenDto.password,
-        );
-        citizenData.password = hashedPassword;
-      }
+      await this.clerkService.updateClerkUser(
+        citizenData.clerkId,
+        updateCitizenDto,
+      );
 
       const citizen = await this.prisma.citizen.update({
         data: citizenData,
@@ -196,7 +318,7 @@ export class CitizenService {
           name: true,
           surname: true,
           role: {
-            select: { name: true },
+            select: { id: true, name: true },
           },
         },
       });
@@ -220,6 +342,30 @@ export class CitizenService {
     }
   }
 
+  async updateCredentials(updateCitizenDto: UpdateCitizenCredentialsDto) {
+    try {
+      const citizenData = updateCitizenDto;
+
+      await this.clerkService.updateClerkUserCredentials(
+        citizenData.clerkId,
+        updateCitizenDto,
+      );
+
+      return { message: 'Mot de passe mis à jour avec succès' };
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      if (error.code === 'P2002') {
+        throw new BadRequestException('Contrainte violée : donnée dupliquée');
+      }
+      console.error(error);
+      throw new InternalServerErrorException(
+        'Une erreur inconnue est survenue',
+      );
+    }
+  }
+
   async remove(id: string) {
     try {
       const citizen = await this.prisma.citizen.findUnique({
@@ -229,7 +375,10 @@ export class CitizenService {
         throw new NotFoundException('Citoyen non trouvé');
       }
 
+      await this.clerkService.deleteClerkUser(citizen.clerkId);
+
       await this.prisma.citizen.delete({ where: { id: id } });
+
       return { message: 'Citoyen supprimé avec succès' };
     } catch (error) {
       if (error instanceof NotFoundException) {

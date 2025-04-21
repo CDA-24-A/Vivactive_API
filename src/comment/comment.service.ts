@@ -17,9 +17,11 @@ export class CommentService {
       const comment = await this.prisma.comment.create({
         data: createCommentDto,
         select: {
+          id: true,
           title: true,
           description: true,
-          createdAt: true,
+          updatedAt: true,
+          ressourceId: true,
           citizen: {
             select: {
               name: true,
@@ -57,9 +59,11 @@ export class CommentService {
       const comments = await this.prisma.comment.findMany({
         where: { citizenId: citizenId },
         select: {
+          id: true,
           title: true,
           description: true,
-          createdAt: true,
+          ressourceId: true,
+          updatedAt: true,
           citizen: {
             select: {
               name: true,
@@ -95,9 +99,11 @@ export class CommentService {
       const comment = await this.prisma.comment.findUnique({
         where: { id: id },
         select: {
+          id: true,
           title: true,
           description: true,
-          createdAt: true,
+          ressourceId: true,
+          updatedAt: true,
           citizen: {
             select: {
               name: true,
@@ -129,9 +135,11 @@ export class CommentService {
         data: updateCommentDto,
         where: { id: id },
         select: {
+          id: true,
           title: true,
           description: true,
-          createdAt: true,
+          ressourceId: true,
+          updatedAt: true,
           citizen: {
             select: {
               name: true,

@@ -6,23 +6,40 @@ import {
   Patch,
   Param,
   Delete,
-  Query,
 } from '@nestjs/common';
 import { InviteService } from './invite.service';
 import { CreateInviteDto } from './dto/create-invite.dto';
-import { UpdateInviteDto } from './dto/update-invite.dto';
 import { ApiReturns } from 'src/utils/types/ApiReturns.type';
 import { InviteType } from 'src/utils/types/PrismaApiModel.type';
 
-@Controller('Invite')
+@Controller('invite')
 export class InviteController {
   constructor(private readonly InviteService: InviteService) {}
+
+  @Post('accept/:inviteId')
+  acceptInvite(
+    @Param('inviteId') inviteId: string,
+  ): Promise<
+    ApiReturns<Omit<InviteType, 'ressource' | 'id' | 'updatedAt'> | null>
+  > {
+    return this.InviteService.acceptInvite(inviteId);
+  }
 
   @Post()
   create(
     @Body() createInviteDto: CreateInviteDto,
   ): Promise<ApiReturns<InviteType | null>> {
     return this.InviteService.create(createInviteDto);
+  }
+
+  @Get('/recever/:receverId')
+  findReceverInvite(@Param('receverId') id: string) {
+    return this.InviteService.findReceverInvite(id);
+  }
+
+  @Get('/sender/:senderId')
+  findSenderInvite(@Param('senderId') id: string) {
+    return this.InviteService.findSenderInvite(id);
   }
 
   @Get(':id')

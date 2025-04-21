@@ -53,6 +53,7 @@ export class CitizenService {
       const citizen = await this.prisma.citizen.create({
         data: newUser,
         select: {
+          id: true,
           email: true,
           name: true,
           surname: true,
@@ -122,6 +123,7 @@ export class CitizenService {
       const citizen = await this.prisma.citizen.create({
         data: newUser,
         select: {
+          id: true,
           email: true,
           name: true,
           surname: true,
@@ -208,6 +210,7 @@ export class CitizenService {
           [orderBy]: sortBy,
         },
         select: {
+          id: true,
           email: true,
           name: true,
           surname: true,
@@ -245,6 +248,7 @@ export class CitizenService {
       const citizen = await this.prisma.citizen.findUnique({
         where: { id: id },
         select: {
+          id: true,
           email: true,
           name: true,
           surname: true,
@@ -314,6 +318,7 @@ export class CitizenService {
         data: citizenData,
         where: { id: id },
         select: {
+          id: true,
           email: true,
           name: true,
           surname: true,

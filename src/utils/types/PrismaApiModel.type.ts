@@ -9,12 +9,13 @@ import {
   Category as CategoryModel,
   Favorite as FavoriteModel,
   Message as MessageModel,
+  Invite as InviteModel,
 } from '@prisma/client';
 
 export interface CitizenType
   extends Omit<
     CitizenModel,
-    'id' | 'password' | 'roleId' | 'createdAt' | 'updatedAt' | 'clerkId'
+    'password' | 'roleId' | 'createdAt' | 'updatedAt' | 'clerkId'
   > {
   role: Omit<RoleModel, 'createdAt' | 'updatedAt'>;
 }
@@ -22,16 +23,7 @@ export interface CitizenType
 export interface RessourceType
   extends Omit<
     ResourceModel,
-    | 'id'
-    | 'category'
-    | 'categoryId'
-    | 'createdAt'
-    | 'updatedAt'
-    | 'fileId'
-    | 'banner'
-    | 'bannerId'
-    | 'file'
-    | 'comment'
+    'categoryId' | 'createdAt' | 'updatedAt' | 'fileId' | 'bannerId' | 'comment'
   > {
   file?: Omit<FileModel, 'resources'> | null;
   step: Array<Omit<StepModel, 'ressourceId'> | null>;
@@ -55,14 +47,7 @@ export interface CommentType
   extends Omit<CommentModel, 'citizenId' | 'createdAt'> {
   citizen: Omit<
     CitizenType,
-    | 'role'
-    | 'createdAt'
-    | 'updatedAt'
-    | 'password'
-    | 'roleId'
-    | 'email'
-    | 'id'
-    | 'comment'
+    'role' | 'createdAt' | 'updatedAt' | 'email' | 'id' | 'comment'
   >;
 }
 
@@ -82,28 +67,15 @@ export type FavoriteType = Omit<
 
 export interface MessageType
   extends Omit<MessageModel, 'id' | 'citizenId' | 'createdAt'> {
-  citizen: Omit<
-    CitizenType,
-    | 'role'
-    | 'createdAt'
-    | 'updatedAt'
-    | 'password'
-    | 'roleId'
-    | 'email'
-    | 'id'
-    | 'Comment'
-  >;
+  citizen: Omit<CitizenType, 'role' | 'email' | 'id' | 'Comment'>;
 }
 
-export interface InviteType {
-  accept: boolean;
-  createdAt: Date;
-  sender: {
-    name: string;
-    surname: string;
-  };
-  recever: {
-    name: string;
-    surname: string;
-  };
+export interface InviteType
+  extends Omit<
+    InviteModel,
+    'createdAt' | 'receverId' | 'senderId' | 'ressourceId'
+  > {
+  recever: Omit<CitizenType, 'role' | 'id' | 'email'>;
+  sender: Omit<CitizenType, 'role' | 'id' | 'email'>;
+  ressource: Pick<RessourceType, 'id' | 'title'>;
 }

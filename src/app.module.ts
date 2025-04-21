@@ -11,6 +11,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { RoleModule } from './role/role.module';
 import { FavoriteModule } from './favorite/favorite.module';
 import { MessageModule } from './message/message.module';
+import { InviteModule } from './invite/invite.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { MessageModule } from './message/message.module';
     CategoryModule,
     MessageModule,
     FavoriteModule,
+    InviteModule,
   ],
   controllers: [AppController],
   providers: [AppService],

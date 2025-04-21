@@ -28,6 +28,8 @@ model Citizen {
   messages Message[]
   progression Progression[]
   favorites Favorite[]
+  InviteSent Invite[] @relation("CitizenSentInvites")
+  InviteRecieved Invite[] @relation("CitizenReceivedInvites")
 }
 
 
@@ -61,6 +63,8 @@ model Ressource {
   status         String
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+
+  Invite Invite[]
 }
 
 model Category {
@@ -152,5 +156,8 @@ model Invite {
   recever    Citizen @relation("CitizenReceivedInvites", fields: [receverId], references: [id])
   receverId  String
   accept     Boolean @default(false)
+  ressource Ressource @relation(fields: [ressourceId], references: [id])
+  ressourceId String
   createdAt  DateTime @default(now())
+  updatedAt DateTime @updatedAt @default(now())
 }

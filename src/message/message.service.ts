@@ -49,6 +49,7 @@ export class MessageService {
           ressourceId: true,
           citizen: {
             select: {
+              id: true,
               name: true,
               surname: true,
             },
@@ -93,6 +94,7 @@ export class MessageService {
           ressourceId: true,
           citizen: {
             select: {
+              id: true,
               name: true,
               surname: true,
             },
@@ -132,6 +134,7 @@ export class MessageService {
           ressourceId: true,
           citizen: {
             select: {
+              id: true,
               name: true,
               surname: true,
             },
@@ -167,6 +170,7 @@ export class MessageService {
           ressourceId: true,
           citizen: {
             select: {
+              id: true,
               name: true,
               surname: true,
             },

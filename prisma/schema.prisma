@@ -59,7 +59,7 @@ model Ressource {
   comment        Comment[]
   progression    Progression[]
   message        Message[]
-  isValidate     Boolean
+  isValidate     Boolean @default(false)
   status         String
   ressourceType   RessourceType @relation(fields: [ressourceTypeId], references: [id])
   ressourceTypeId String

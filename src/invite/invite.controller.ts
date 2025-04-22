@@ -34,6 +34,11 @@ export class InviteController {
     return this.InviteService.findSenderInvite(id);
   }
 
+  @Get('/citizen/:citizenId')
+  findCitizenInvites(@Param('citizenId') citizenId: string) {
+    return this.InviteService.findCitizenInvites(citizenId);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.InviteService.findOne(id);

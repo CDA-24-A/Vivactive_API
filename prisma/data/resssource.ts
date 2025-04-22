@@ -73,10 +73,8 @@ const titlesAndDescriptions = [
 
 export function generateRessourcesSeed(
   categoryIds: string[],
-  ressourceTypeId: string
+  ressourceTypeId: string,
 ) {
-  console.log('generateRessourcesSeed', categoryIds, ressourceTypeId);
-  
   if (categoryIds.length === 0) {
     throw new Error('Le tableau de categoryIds ne peut pas être vide.');
   }

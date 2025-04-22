@@ -98,9 +98,6 @@ async function main() {
 
   const bddResourceType = await prisma.ressourceType.findMany();
 
-  console.log('Les types de ressources récupérés avec succès !', bddResourceType);
-  
-
   const generatedRessources = generateRessourcesSeed(
     bddCategories.map((cat) => cat.id),
     bddResourceType[0].id,

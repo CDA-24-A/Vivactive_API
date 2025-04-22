@@ -11,6 +11,7 @@ import { CitizenService } from 'src/citizen/citizen.service';
 import { ClerkService } from 'src/auth/clerk.service';
 import { PrismaService } from 'src/prisma.service';
 import { ProgressionService } from 'src/progression/progression.service';
+import { ressourceType } from './data/resourceType';
 
 const prisma = new PrismaClient();
 const citizenService = new CitizenService(
@@ -86,10 +87,23 @@ async function main() {
 
   console.log('Les catégories ont été insérées avec succès !');
 
+  await prisma.ressourceType.createMany({
+    data: ressourceType,
+    skipDuplicates: true,
+  });
+
+  console.log('Les types de ressources ont été insérés avec succès !');
+
   const bddCategories = await prisma.category.findMany();
+
+  const bddResourceType = await prisma.ressourceType.findMany();
+
+  console.log('Les types de ressources récupérés avec succès !', bddResourceType);
+  
 
   const generatedRessources = generateRessourcesSeed(
     bddCategories.map((cat) => cat.id),
+    bddResourceType[0].id,
   );
 
   await prisma.ressource.createMany({

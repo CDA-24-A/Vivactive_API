@@ -12,6 +12,7 @@ import { RoleModule } from './role/role.module';
 import { FavoriteModule } from './favorite/favorite.module';
 import { MessageModule } from './message/message.module';
 import { InviteModule } from './invite/invite.module';
+import { RessourceTypeModule } from './ressource-type/ressource-type.module';
 
 @Module({
   imports: [
@@ -26,7 +27,8 @@ import { InviteModule } from './invite/invite.module';
     MessageModule,
     FavoriteModule,
     InviteModule,
-  ],
+
+    RessourceTypeModule],
   controllers: [AppController],
   providers: [AppService],
 })

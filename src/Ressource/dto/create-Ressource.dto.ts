@@ -28,6 +28,9 @@ export class CreateRessourceDto {
 
   @IsOptional()
   categoryId: string;
+  
+  @IsNotEmpty()
+  ressourceTypeId: string;
 
   @IsOptional()
   @IsBoolean()

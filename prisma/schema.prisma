@@ -61,6 +61,8 @@ model Ressource {
   message        Message[]
   isValidate     Boolean
   status         String
+  ressourceType   RessourceType @relation(fields: [ressourceTypeId], references: [id])
+  ressourceTypeId String
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
@@ -146,6 +148,14 @@ model Message {
   ressourceId String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
+}
+
+model RessourceType {
+  id         String      @id @default(uuid())
+  name       String
+  ressource   Ressource[]
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt @default(now())
 }
 
 

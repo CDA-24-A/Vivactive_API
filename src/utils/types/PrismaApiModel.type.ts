@@ -23,7 +23,6 @@ export interface CitizenType
 export interface RessourceType
   extends Omit<
     ResourceModel,
-    | 'id'
     | 'category'
     | 'categoryId'
     | 'createdAt'
@@ -73,7 +72,7 @@ export type StepType = Omit<StepModel, 'id'>;
 
 export type FavoriteType = Omit<
   FavoriteModel,
-  'id' | 'createdAt' | 'updatedAt'
+  'createdAt' | 'updatedAt' | 'ressourceId'
 >;
 
 export interface MessageType

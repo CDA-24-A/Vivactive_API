@@ -71,9 +71,17 @@ const titlesAndDescriptions = [
   },
 ];
 
-export function generateRessourcesSeed(categoryIds: string[]) {
+export function generateRessourcesSeed(
+  categoryIds: string[],
+  ressourceTypeId: string
+) {
+  console.log('generateRessourcesSeed', categoryIds, ressourceTypeId);
+  
   if (categoryIds.length === 0) {
     throw new Error('Le tableau de categoryIds ne peut pas être vide.');
+  }
+  if (!ressourceTypeId) {
+    throw new Error('Le resourceId ne peut pas être vide.');
   }
 
   const fixedRessources = [
@@ -85,7 +93,7 @@ export function generateRessourcesSeed(categoryIds: string[]) {
       nbParticipant: 10,
       deadLine: new Date('2025-06-01'),
       categoryId: categoryIds[0 % categoryIds.length],
-
+      ressourceTypeId: ressourceTypeId,
       isValidate: true,
       status: 'En cours',
       createdAt: new Date(),
@@ -99,7 +107,7 @@ export function generateRessourcesSeed(categoryIds: string[]) {
       nbParticipant: 25,
       deadLine: new Date('2025-08-15'),
       categoryId: categoryIds[1 % categoryIds.length],
-
+      ressourceTypeId: ressourceTypeId,
       isValidate: true,
       status: 'Validée',
       createdAt: new Date(),
@@ -113,7 +121,7 @@ export function generateRessourcesSeed(categoryIds: string[]) {
       nbParticipant: 18,
       deadLine: new Date('2025-03-10'),
       categoryId: categoryIds[2 % categoryIds.length],
-
+      ressourceTypeId: ressourceTypeId,
       isValidate: true,
       status: 'Expirée',
       createdAt: new Date(),
@@ -127,7 +135,7 @@ export function generateRessourcesSeed(categoryIds: string[]) {
       nbParticipant: 18,
       deadLine: new Date('2025-03-10'),
       categoryId: categoryIds[2 % categoryIds.length],
-
+      ressourceTypeId: ressourceTypeId,
       isValidate: false,
       status: 'En attente',
       createdAt: new Date(),
@@ -142,6 +150,7 @@ export function generateRessourcesSeed(categoryIds: string[]) {
     nbParticipant: Math.floor(Math.random() * 3),
     deadLine: new Date(`2025-12-${(i % 28) + 1}`),
     categoryId: categoryIds[i % categoryIds.length],
+    ressourceTypeId: ressourceTypeId,
     isValidate: true,
     status: i % 3 === 0 ? 'Validée' : 'En cours',
     createdAt: new Date(),

@@ -23,7 +23,18 @@ export interface CitizenType
 export interface RessourceType
   extends Omit<
     ResourceModel,
-    'categoryId' | 'createdAt' | 'updatedAt' | 'fileId' | 'bannerId' | 'comment'
+    | 'id'
+    | 'category'
+    | 'categoryId'
+    | 'createdAt'
+    | 'updatedAt'
+    | 'fileId'
+    | 'banner'
+    | 'bannerId'
+    | 'file'
+    | 'comment'
+    | 'ressourceTypeId'
+    | 'ressourceType'
   > {
   file?: Omit<FileModel, 'resources'> | null;
   step: Array<Omit<StepModel, 'ressourceId'> | null>;
@@ -77,5 +88,5 @@ export interface InviteType
   > {
   recever: Omit<CitizenType, 'role' | 'id' | 'email'>;
   sender: Omit<CitizenType, 'role' | 'id' | 'email'>;
-  ressource: Pick<RessourceType, 'id' | 'title'>;
+  ressource: Pick<RessourceType, 'title'>;
 }

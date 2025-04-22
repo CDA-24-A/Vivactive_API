@@ -217,6 +217,7 @@ export class CitizenService {
           role: {
             select: { id: true, name: true },
           },
+          clerkId: true,
         },
       });
 

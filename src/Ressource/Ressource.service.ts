@@ -209,6 +209,7 @@ export class RessourceService {
               updatedAt: true,
               citizen: {
                 select: {
+                  id:true,
                   name: true,
                   surname: true,
                 },

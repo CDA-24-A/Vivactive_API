@@ -46,7 +46,7 @@ model Ressource {
   title          String
   description    String
   maxParticipant Int?     
-  nbParticipant  Int?     
+  nbParticipant  Int @default(0)     
   deadLine       DateTime?
   category       Category @relation(fields: [categoryId], references: [id])
   categoryId     String

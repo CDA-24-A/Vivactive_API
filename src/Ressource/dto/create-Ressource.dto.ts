@@ -26,11 +26,11 @@ export class CreateRessourceDto {
   @IsDateString()
   deadLine?: Date;
 
-  @IsOptional()
-  categoryId: string;
-  
   @IsNotEmpty()
-  ressourceTypeId: string;
+  categoryId: string;
+
+  @IsNotEmpty()
+  typeRessourceId: string;
 
   @IsOptional()
   @IsBoolean()

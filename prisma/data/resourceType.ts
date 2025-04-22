@@ -3,7 +3,7 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
-export const ressourceType = [
+export const typeRessource = [
   {
     name: 'Article',
     createdAt: new Date(),
@@ -37,8 +37,8 @@ export const ressourceType = [
 ];
 
 async function main() {
-  await prisma.ressourceType.createMany({
-    data: ressourceType,
+  await prisma.typeRessource.createMany({
+    data: typeRessource,
     skipDuplicates: true,
   });
 }
@@ -48,6 +48,7 @@ main()
     console.error(e);
     process.exit(1);
   })
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
   .finally(async () => {
     await prisma.$disconnect();
   });

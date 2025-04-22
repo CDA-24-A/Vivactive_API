@@ -1,42 +1,43 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { RessourceTypeService } from './ressource-type.service';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { CreateRessourceTypeDto } from './dto/create-ressource-type.dto';
 import { UpdateRessourceTypeDto } from './dto/update-ressource-type.dto';
+import { TypeRessourceService } from './ressource-type.service';
 
 @Controller('ressource-type')
 export class RessourceTypeController {
-  constructor(private readonly ressourceTypeService: RessourceTypeService) {}
+  constructor(private readonly typeRessourceService: TypeRessourceService) {}
 
-  // POST /ressource-types : Créer un nouveau RessourceType
   @Post()
   async create(@Body() dto: CreateRessourceTypeDto) {
-    return await this.ressourceTypeService.createRessourceType(dto);
+    return await this.typeRessourceService.createRessourceType(dto);
   }
 
-  // PATCH /ressource-types/:id : Mettre à jour un RessourceType
   @Patch(':id')
-  async update(
-    @Param('id') id: string,
-    @Body() dto: UpdateRessourceTypeDto,
-  ) {
-    return await this.ressourceTypeService.updateRessourceType(id, dto);
+  async update(@Param('id') id: string, @Body() dto: UpdateRessourceTypeDto) {
+    return await this.typeRessourceService.updateRessourceType(id, dto);
   }
 
-  // GET /ressource-types : Obtenir la liste de tous les RessourceType
   @Get()
   async findAll() {
-    return await this.ressourceTypeService.findAll();
+    return await this.typeRessourceService.findAll();
   }
 
-  // GET /ressource-types/:id : Obtenir un RessourceType par son id
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    return await this.ressourceTypeService.findOne(id);
+    return await this.typeRessourceService.findOne(id);
   }
 
-  // DELETE /ressource-types/:id : Supprimer un RessourceType
+  // DELETE /ressource-types/:id : Supprimer un TypeRessource
   @Delete(':id')
   async delete(@Param('id') id: string) {
-    return await this.ressourceTypeService.deleteRessourceType(id);
+    return await this.typeRessourceService.deleteRessourceType(id);
   }
 }

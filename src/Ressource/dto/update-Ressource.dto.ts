@@ -9,39 +9,43 @@ import {
 export class UpdateRessourceDto {
   @IsOptional()
   @IsNotEmpty()
-  title?: string;
+  title: string;
 
   @IsOptional()
   @IsNotEmpty()
-  description?: string;
+  description: string;
 
   @IsOptional()
   @IsInt()
-  maxParticipant?: number;
+  maxParticipant: number;
 
   @IsOptional()
   @IsInt()
-  nbParticipant?: number;
+  nbParticipant: number;
 
   @IsOptional()
   @IsDateString()
-  deadLine?: Date;
+  deadLine: Date;
 
   @IsOptional()
   @IsNotEmpty()
-  categoryId?: string;
+  typeRessourceId: string;
 
   @IsOptional()
-  fileId?: string;
+  @IsNotEmpty()
+  categoryId: string;
 
   @IsOptional()
-  bannerId?: string;
+  fileId: string;
+
+  @IsOptional()
+  bannerId: string;
 
   @IsOptional()
   @IsBoolean()
-  isValidate?: boolean;
+  isValidate: boolean;
 
   @IsOptional()
   @IsNotEmpty()
-  status?: string;
+  status: string;
 }

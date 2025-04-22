@@ -68,7 +68,7 @@ export class RessourceService {
           step: {
             select: { id: true, title: true, description: true, order: true },
           },
-          ressourceType: {
+          typeRessource: {
             select: { id: true, name: true },
           },
         },
@@ -147,7 +147,7 @@ export class RessourceService {
           banner: {
             select: { id: true, url: true },
           },
-          ressourceType: {
+          typeRessource: {
             select: { id: true, name: true },
           },
         },
@@ -215,7 +215,7 @@ export class RessourceService {
               },
             },
           },
-          ressourceType: {
+          typeRessource: {
             select: { id: true, name: true },
           },
         },
@@ -260,7 +260,7 @@ export class RessourceService {
           banner: {
             select: { id: true, url: true },
           },
-          ressourceType: {
+          typeRessource: {
             select: { id: true, name: true },
           },
         },
@@ -333,6 +333,9 @@ export class RessourceService {
           },
           banner: {
             select: { id: true, url: true },
+          },
+          typeRessource: {
+            select: { id: true, name: true },
           },
         },
       });

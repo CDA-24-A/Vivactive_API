@@ -49,6 +49,34 @@ export class StepService {
     }
   }
 
+  async createMany(createStepsDto: CreateStepDto[]) {
+    try {
+      const result = await this.prisma.step.createMany({
+        data: createStepsDto,
+        skipDuplicates: true,
+      });
+
+      if (result.count === 0) {
+        throw new InternalServerErrorException(`Aucune étape n'a été créée.`);
+      }
+
+      return {
+        data: result,
+        message: `${result.count} étape(s) créée(s) avec succès`,
+      };
+    } catch (error) {
+      if (error.code === 'P2002') {
+        throw new BadRequestException(
+          'Une erreur de validation est survenue (données dupliquées)',
+        );
+      }
+      console.error(error);
+      throw new InternalServerErrorException(
+        'Une erreur inconnue est survenue',
+      );
+    }
+  }
+
   async findAll() {
     try {
       const steps = await this.prisma.step.findMany({

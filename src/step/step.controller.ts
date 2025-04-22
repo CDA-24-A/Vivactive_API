@@ -17,6 +17,12 @@ import { ApiReturns } from 'src/utils/types/ApiReturns.type';
 @Controller('step')
 export class StepController {
   constructor(private readonly stepService: StepService) {}
+  @Post('/many')
+  createMany(
+    @Body() createStepDto: CreateStepDto[],
+  ): Promise<ApiReturns<unknown>> {
+    return this.stepService.createMany(createStepDto);
+  }
 
   @Post()
   create(

@@ -20,7 +20,7 @@ export class FavoriteController {
     return await this.favoriteService.createFavorite(createFavoriteDto);
   }
 
-  @Delete()
+  @Delete(':favoriteId')
   async removeFavorite(@Param('favoriteId') favoriteId: string) {
     return await this.favoriteService.removeFavorite(favoriteId);
   }

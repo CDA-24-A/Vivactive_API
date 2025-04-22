@@ -240,7 +240,6 @@ export class InviteService {
 
   async findCitizenInvites(citizenId: string) {
     try {
-      console.log(citizenId);
       const invite = await this.prisma.invite.findMany({
         where: { OR: [{ senderId: citizenId }, { receverId: citizenId }] },
         select: {

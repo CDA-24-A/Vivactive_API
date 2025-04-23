@@ -64,11 +64,6 @@ const titlesAndDescriptions = [
     description:
       'Avec des matériaux simples, fabriquez un objet utile pour votre maison : une étagère, un porte-manteau, ou un rangement. À faire ensemble, étape par étape !',
   },
-  {
-    title: 'Défi Jardinage : Créez un mini potager à la maison | DEMO !',
-    description:
-      'Plantez des herbes ou des légumes dans des pots et suivez ensemble les étapes de croissance. Un projet de jardinage à réaliser en famille ou avec des amis !',
-  },
 ];
 
 export function generateRessourcesSeed(
@@ -136,6 +131,20 @@ export function generateRessourcesSeed(
       typeRessourceId: typeRessourceId,
       isValidate: false,
       status: 'En attente',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
+      title: 'Défi Jardinage : Créez un mini potager à la maison | DEMO !',
+      description:
+        'Plantez des herbes ou des légumes dans des pots et suivez ensemble les étapes de croissance. Un projet de jardinage à réaliser en famille ou avec des amis !',
+      maxParticipant: 50,
+      nbParticipant: 7,
+      deadLine: new Date('2028-03-10'),
+      categoryId: categoryIds[2 % categoryIds.length],
+      typeRessourceId: typeRessourceId,
+      isValidate: true,
+      status: 'En cours',
       createdAt: new Date(),
       updatedAt: new Date(),
     },

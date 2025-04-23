@@ -51,6 +51,7 @@ export class RessourceService {
           fileId: file?.id,
           bannerId: banner?.id,
           status: ressourceData.status || RessourceStatus.EN_ATTENTE,
+          citizenId: ressourceData.citizenId,
         },
         select: {
           id: true,
@@ -96,6 +97,13 @@ export class RessourceService {
           },
           typeRessource: {
             select: { id: true, name: true },
+          },
+          citizen: {
+            select: {
+              id: true,
+              name: true,
+              surname: true,
+            },
           },
         },
       });
@@ -176,6 +184,13 @@ export class RessourceService {
           typeRessource: {
             select: { id: true, name: true },
           },
+          citizen: {
+            select: {
+              id: true,
+              name: true,
+              surname: true,
+            },
+          },
         },
       });
 
@@ -245,6 +260,49 @@ export class RessourceService {
           typeRessource: {
             select: { id: true, name: true },
           },
+          citizen: {
+            select: {
+              id: true,
+              name: true,
+              surname: true,
+            },
+          },
+        },
+      });
+
+      if (!Ressource) {
+        throw new NotFoundException('Ressources non trouvé');
+      }
+
+      return { data: Ressource, message: 'Ressources récupéré avec succès' };
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      console.error(error);
+      throw new InternalServerErrorException(
+        'Une erreur inconnue est survenue',
+      );
+    }
+  }
+
+  async findCitizenRessource(citizenId: string) {
+    try {
+      const Ressource = await this.prisma.ressource.findMany({
+        where: { citizenId },
+        select: {
+          id: true,
+          title: true,
+          deadLine: true,
+          isValidate: true,
+          status: true,
+          citizen: {
+            select: {
+              id: true,
+              name: true,
+              surname: true,
+            },
+          },
         },
       });
 
@@ -289,6 +347,13 @@ export class RessourceService {
           },
           typeRessource: {
             select: { id: true, name: true },
+          },
+          citizen: {
+            select: {
+              id: true,
+              name: true,
+              surname: true,
+            },
           },
         },
       });

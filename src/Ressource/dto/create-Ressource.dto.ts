@@ -50,4 +50,7 @@ export class CreateRessourceDto {
 
   @IsOptional()
   step?: Omit<StepType, 'ressourceId'>[];
+
+  @IsOptional()
+  citizenId?: string;
 }

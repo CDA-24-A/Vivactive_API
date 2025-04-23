@@ -31,6 +31,8 @@ async function main() {
   await prisma.citizen.deleteMany();
   await prisma.role.deleteMany();
   await prisma.category.deleteMany();
+  await prisma.typeRessource.deleteMany();
+  await prisma.invite.deleteMany();
 
   console.log('Toutes les données ont été supprimées avec succès !');
 

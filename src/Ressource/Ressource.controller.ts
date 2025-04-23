@@ -15,6 +15,7 @@ import { ApiReturns } from 'src/utils/types/ApiReturns.type';
 import { validatePagination } from 'src/utils/pageQueryhandeler';
 import {
   RessourceType,
+  RessourceTypeCitizen,
   RessourceWithCommentType,
 } from 'src/utils/types/PrismaApiModel.type';
 
@@ -27,6 +28,14 @@ export class RessourceController {
     @Body() createRessourceDto: CreateRessourceDto,
   ): Promise<ApiReturns<RessourceType | null>> {
     return this.RessourceService.create(createRessourceDto);
+  }
+
+  //Régler le problème de type incompréhensible
+  @Get('/citizen/:citizenId')
+  findCitizenRessources(
+    @Param('citizenId') citizenId: string,
+  ): Promise<ApiReturns<unknown> | null> {
+    return this.RessourceService.findCitizenRessource(citizenId);
   }
 
   @Get()
@@ -59,7 +68,7 @@ export class RessourceController {
   @Patch('/validate/:id')
   validate(
     @Param('id') id: string,
-  ): Promise<ApiReturns<Omit<RessourceType, 'step'>>> {
+  ): Promise<ApiReturns<Omit<RessourceType, 'step' | 'citizen'>>> {
     return this.RessourceService.validateRessource(id);
   }
 

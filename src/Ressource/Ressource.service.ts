@@ -387,7 +387,7 @@ export class RessourceService {
       }
 
       await this.prisma.ressource.delete({ where: { id: id } });
-      return { message: 'Ressources supprimé avec succès' };
+      return { data: true, message: 'Ressources supprimé avec succès' };
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw error;
@@ -406,7 +406,7 @@ export class RessourceService {
   async validateRessource(id: string) {
     try {
       const Ressource = await this.prisma.ressource.update({
-        data: { isValidate: true },
+        data: { isValidate: true, status: RessourceStatus.VALIDEE },
         where: { id: id },
         select: {
           id: true,

@@ -10,6 +10,7 @@ import {
   Favorite as FavoriteModel,
   Message as MessageModel,
   Invite as InviteModel,
+  TypeRessource as TypeRessourceModel,
 } from '@prisma/client';
 
 export interface CitizenType
@@ -23,7 +24,6 @@ export interface CitizenType
 export interface RessourceType
   extends Omit<
     ResourceModel,
-    | 'id'
     | 'category'
     | 'categoryId'
     | 'createdAt'
@@ -33,11 +33,11 @@ export interface RessourceType
     | 'bannerId'
     | 'file'
     | 'comment'
-    | 'ressourceTypeId'
-    | 'ressourceType'
+    | 'typeRessourceId'
   > {
   file?: Omit<FileModel, 'resources'> | null;
   step: Array<Omit<StepModel, 'ressourceId'> | null>;
+  typeRessource: TypeRessourceType;
 }
 
 export interface RessourceWithCommentType extends RessourceType {
@@ -73,7 +73,7 @@ export type StepType = Omit<StepModel, 'id'>;
 
 export type FavoriteType = Omit<
   FavoriteModel,
-  'id' | 'createdAt' | 'updatedAt'
+  'createdAt' | 'updatedAt' | 'ressourceId'
 >;
 
 export interface MessageType
@@ -90,3 +90,8 @@ export interface InviteType
   sender: Omit<CitizenType, 'role' | 'id' | 'email'>;
   ressource: Pick<RessourceType, 'title'>;
 }
+
+export type TypeRessourceType = Omit<
+  TypeRessourceModel,
+  'createdAt' | 'updatedAt'
+>;

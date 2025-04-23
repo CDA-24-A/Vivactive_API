@@ -17,6 +17,12 @@ import { ApiReturns } from 'src/utils/types/ApiReturns.type';
 @Controller('step')
 export class StepController {
   constructor(private readonly stepService: StepService) {}
+  @Post('/many')
+  createMany(
+    @Body() createStepDto: CreateStepDto[],
+  ): Promise<ApiReturns<unknown>> {
+    return this.stepService.createMany(createStepDto);
+  }
 
   @Post()
   create(
@@ -40,6 +46,13 @@ export class StepController {
   @Get(':id')
   findOne(@Param('id') id: string): Promise<ApiReturns<StepModel | null>> {
     return this.stepService.findOne(id);
+  }
+
+  @Patch('/many')
+  updateMany(
+    @Body() updateStepDto: UpdateStepDto[],
+  ): Promise<ApiReturns<unknown>> {
+    return this.stepService.updateMultiple(updateStepDto);
   }
 
   @Patch(':id')

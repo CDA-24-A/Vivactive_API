@@ -1,4 +1,8 @@
-import { Injectable, ConflictException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  ConflictException,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { CreateFavoriteDto } from './dto/create-favorite.dto';
 
@@ -6,47 +10,46 @@ import { CreateFavoriteDto } from './dto/create-favorite.dto';
 export class FavoriteService {
   constructor(private prisma: PrismaService) {}
 
-  async getFavoritesForClient(citizenId: string) {    
-
-    // Vérifier que le client existe et récupérer ses favoris
-    const citizen = await this.prisma.citizen.findUnique({
-      where: { id: String(citizenId) },
-      include: { 
-        favorites: { 
-          // Inclure les infos sur la ressource favorite
-          include: { 
-            ressource: true 
-          } 
-        } 
+  async getFavoritesFromCitizen(citizenId: string) {
+    const favorites = await this.prisma.favorite.findMany({
+      where: { citizenId: citizenId },
+      select: {
+        id: true,
+        citizenId: true,
+        ressource: {
+          select: {
+            id: true,
+            title: true,
+          },
+        },
       },
     });
 
-    if (!citizen) {
-      throw new NotFoundException(`Le client avec l'ID ${citizenId} n'existe pas.`);
+    if (!citizenId) {
+      throw new NotFoundException(`Citoyen introuvable`);
     }
 
     // Retourne la liste des favoris pour ce client
-    return citizen.favorites.map((favorite) => ({
-      id: favorite.id,
-      ressource: favorite.ressource,
-    }))
+    return { data: favorites, message: 'Favoris récupéré avec succès.' };
   }
 
   async createFavorite(createFavoriteDto: CreateFavoriteDto) {
     const { citizenId, ressourceId } = createFavoriteDto;
 
-    const ressourceExistante = await this.prisma.ressource.findUnique({
+    const ressource = await this.prisma.ressource.findUnique({
       where: { id: ressourceId },
     });
-    if (!ressourceExistante) {
-      throw new NotFoundException(`La ressource avec l'id ${ressourceId} n'existe pas.`);
+
+    if (!ressource) {
+      throw new NotFoundException(`Ressource introuvable`);
     }
 
-    // Vérifier si le favori existe déjà pour éviter les doublons
     const existingFavorite = await this.prisma.favorite.findUnique({
       where: {
-        // Le nom composite est généré automatiquement à partir des champs uniques définis
-        citizenId_ressourceId: { citizenId: String(citizenId), ressourceId: String(ressourceId) },
+        citizenId_ressourceId: {
+          citizenId: citizenId,
+          ressourceId: ressourceId,
+        },
       },
     });
 
@@ -56,25 +59,21 @@ export class FavoriteService {
 
     // Créer le favori en connectant le citizen et la resource
     return await this.prisma.favorite.create({
-      data: {
-        citizen: { connect: { id: String(citizenId) } },
-        ressource: { connect: { id: String(ressourceId) } },
+      data: createFavoriteDto,
+      select: {
+        id: true,
+        citizenId: true,
+        ressourceId: true,
       },
     });
   }
 
-  async removeFavorite(removeFavoriteDto: CreateFavoriteDto) {
-    const { citizenId, ressourceId } = removeFavoriteDto;
-
+  async removeFavorite(favoriteId: string) {
     try {
-      return await this.prisma.favorite.delete({
-        where: {
-          citizenId_ressourceId: {
-            citizenId: String(citizenId),
-            ressourceId: String(ressourceId),
-          },
-        },
+      await this.prisma.favorite.delete({
+        where: { id: favoriteId },
       });
+      return { message: 'Favoris supprimé avec succès' };
     } catch (error) {
       throw new NotFoundException('Favori non trouvé.');
     }

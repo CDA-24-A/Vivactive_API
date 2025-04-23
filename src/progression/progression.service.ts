@@ -56,6 +56,35 @@ export class ProgressionService {
           "Une erreur est survenue durant l'initilisation de la progression",
         );
       }
+
+      const ressource = await this.prisma.ressource.findUnique({
+        where: { id: ressourceId },
+        select: {
+          id: true,
+          maxParticipant: true,
+          nbParticipant: true,
+        },
+      });
+
+      if (!ressource || !ressource.maxParticipant) {
+        throw new BadRequestException(
+          'Une erreur est survenue dans la récupération de la ressource',
+        );
+      }
+
+      if (ressource.nbParticipant >= ressource.maxParticipant) {
+        throw new BadRequestException('Nombre maximum atteint');
+      }
+
+      await this.prisma.ressource.update({
+        where: { id: ressourceId },
+        data: {
+          nbParticipant: {
+            increment: 1,
+          },
+        },
+      });
+
       return {
         data: initializerProgression,
         message: 'Progression initialisé avec succès',
@@ -159,18 +188,58 @@ export class ProgressionService {
 
   async deleteProgression(citizenId: string) {
     if (!citizenId) {
-      throw new BadRequestException('Veuillez renseigner le citizen ');
+      throw new BadRequestException('Veuillez renseigner le citizen');
     }
+
     try {
-      const progression = await this.prisma.progression.deleteMany({
-        where: {
-          citizenId,
+      const oneProgression = await this.prisma.progression.findFirst({
+        where: { citizenId },
+        select: { ressourceId: true },
+      });
+
+      if (!oneProgression) {
+        return {
+          data: [],
+          message: 'Aucune progression à supprimer',
+        };
+      }
+
+      const ressource = await this.prisma.ressource.findUnique({
+        where: { id: oneProgression.ressourceId },
+        select: { nbParticipant: true },
+      });
+
+      if (!ressource || !ressource.nbParticipant) {
+        throw new NotFoundException('Ressource introuvable');
+      }
+
+      if (ressource.nbParticipant <= 0) {
+        throw new BadRequestException(
+          'Le nombre de participants est déjà à zéro',
+        );
+      }
+
+      const deleteProgressions = this.prisma.progression.deleteMany({
+        where: { citizenId },
+      });
+
+      const decrementParticipant = this.prisma.ressource.update({
+        where: { id: oneProgression.ressourceId },
+        data: {
+          nbParticipant: {
+            decrement: 1,
+          },
         },
       });
 
+      const result = await this.prisma.$transaction([
+        deleteProgressions,
+        decrementParticipant,
+      ]);
+
       return {
-        data: progression,
-        message: 'Progression supprimé avec succès',
+        data: result,
+        message: 'Progressions supprimées et nbParticipant mis à jour',
       };
     } catch (error) {
       if (error.code === 'P2002') {
@@ -178,15 +247,14 @@ export class ProgressionService {
           'Une erreur de validation est survenue (données dupliquées)',
         );
       }
-      //------Permet de bien renvoyer les erreurs de initializeProgression si il y en a
-      if (error instanceof BadRequestException) {
+
+      if (
+        error instanceof BadRequestException ||
+        error instanceof NotFoundException
+      ) {
         throw error;
       }
 
-      if (error instanceof NotFoundException) {
-        throw error;
-      }
-      //-----------------------//
       console.error(error);
       throw new InternalServerErrorException(
         'Une erreur inconnue est survenue',

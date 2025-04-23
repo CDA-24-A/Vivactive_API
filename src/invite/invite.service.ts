@@ -238,6 +238,48 @@ export class InviteService {
     }
   }
 
+  async findCitizenInvites(citizenId: string) {
+    try {
+      const invite = await this.prisma.invite.findMany({
+        where: { OR: [{ senderId: citizenId }, { receverId: citizenId }] },
+        select: {
+          id: true,
+          accept: true,
+          createdAt: true,
+          ressource: { select: { id: true, title: true } },
+          sender: {
+            select: {
+              id: true,
+              name: true,
+              surname: true,
+            },
+          },
+          recever: {
+            select: {
+              id: true,
+              name: true,
+              surname: true,
+            },
+          },
+        },
+      });
+
+      if (!invite) {
+        throw new NotFoundException('Invite non trouvé');
+      }
+
+      return { data: invite, message: 'Invite récupéré avec succès' };
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      console.error(error);
+      throw new InternalServerErrorException(
+        'Une erreur inconnue est survenue',
+      );
+    }
+  }
+
   async remove(id: string) {
     try {
       const Invite = await this.prisma.invite.findUnique({

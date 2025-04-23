@@ -379,14 +379,21 @@ export class RessourceService {
 
   async remove(id: string) {
     try {
-      const Ressource = await this.prisma.ressource.findUnique({
+      const ressource = await this.prisma.ressource.findUnique({
         where: { id: id },
       });
-      if (!Ressource) {
+      if (!ressource) {
         throw new NotFoundException('Ressources non trouvé');
       }
 
-      await this.prisma.ressource.delete({ where: { id: id } });
+      await this.prisma.step.deleteMany({
+        where: { ressourceId: ressource.id },
+      });
+
+      await this.prisma.ressource.delete({
+        where: { id: id },
+      });
+
       return { data: true, message: 'Ressources supprimé avec succès' };
     } catch (error) {
       if (error instanceof NotFoundException) {
@@ -406,7 +413,7 @@ export class RessourceService {
   async validateRessource(id: string) {
     try {
       const Ressource = await this.prisma.ressource.update({
-        data: { isValidate: true, status: RessourceStatus.VALIDEE },
+        data: { isValidate: true, status: RessourceStatus.VALIDE },
         where: { id: id },
         select: {
           id: true,

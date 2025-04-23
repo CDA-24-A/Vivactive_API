@@ -62,7 +62,7 @@ export class StepService {
 
       return {
         data: result,
-        message: `${result.count} étape(s) créée(s) avec succès`,
+        message: `${result.count} étape(s) crée(s) avec succès`,
       };
     } catch (error) {
       if (error.code === 'P2002') {
@@ -188,6 +188,42 @@ export class StepService {
       }
 
       return { data: step, message: 'Etape mise à jour avec succès' };
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      if (error.code === 'P2002') {
+        throw new BadRequestException('Contrainte violée : donnée dupliquée');
+      }
+      console.error(error);
+      throw new InternalServerErrorException(
+        'Une erreur inconnue est survenue',
+      );
+    }
+  }
+
+  async updateMultiple(updateStepDto: UpdateStepDto[]) {
+    try {
+      // Utilisation de Promise.all pour exécuter plusieurs mises à jour en parallèle
+      const updatePromises = updateStepDto.map((stepDto) =>
+        this.prisma.step.update({
+          where: {
+            id: stepDto.id, // Identifiant unique de l'étape à mettre à jour
+          },
+          data: {
+            title: stepDto.title,
+            description: stepDto.description,
+            order: stepDto.order,
+          },
+        }),
+      );
+
+      const updatedSteps = await Promise.all(updatePromises);
+
+      return {
+        data: updatedSteps,
+        message: `${updatedSteps.length} Étapes mises à jour avec succès`,
+      };
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw error;

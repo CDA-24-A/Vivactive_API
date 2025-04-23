@@ -6,6 +6,7 @@ import {
   IsDateString,
   IsString,
 } from 'class-validator';
+import { StepType } from 'src/utils/types/PrismaApiModel.type';
 
 export class CreateRessourceDto {
   @IsNotEmpty()
@@ -46,4 +47,7 @@ export class CreateRessourceDto {
   @IsOptional()
   @IsString()
   bannerBytes?: string;
+
+  @IsOptional()
+  step?: Omit<StepType, 'ressourceId'>[];
 }

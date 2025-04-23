@@ -48,6 +48,13 @@ export class StepController {
     return this.stepService.findOne(id);
   }
 
+  @Patch('/many')
+  updateMany(
+    @Body() updateStepDto: UpdateStepDto[],
+  ): Promise<ApiReturns<unknown>> {
+    return this.stepService.updateMultiple(updateStepDto);
+  }
+
   @Patch(':id')
   update(
     @Param('id') id: string,

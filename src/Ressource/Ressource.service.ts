@@ -10,14 +10,19 @@ import { CreateRessourceDto } from './dto/create-Ressource.dto';
 import { UpdateRessourceDto } from './dto/update-Ressource.dto';
 import { PrismaService } from 'src/prisma.service';
 import { RessourceStatus } from 'src/utils/ressourceStatus.enum';
+import { StepService } from 'src/step/step.service';
 
 @Injectable()
 export class RessourceService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private stepService: StepService,
+  ) {}
 
   async create(createRessourceDto: CreateRessourceDto) {
     try {
-      const { fileBytes, bannerBytes, ...ressourceData } = createRessourceDto;
+      const { fileBytes, bannerBytes, step, ...ressourceData } =
+        createRessourceDto;
 
       let file: { id: string } | null = null;
       let banner: { id: string } | null = null;
@@ -40,13 +45,34 @@ export class RessourceService {
         });
       }
 
-      const Ressource = await this.prisma.ressource.create({
+      const ressource = await this.prisma.ressource.create({
         data: {
           ...ressourceData,
           fileId: file?.id,
           bannerId: banner?.id,
           status: ressourceData.status || RessourceStatus.EN_ATTENTE,
         },
+        select: {
+          id: true,
+        },
+      });
+
+      if (ressource && step && step?.length > 0) {
+        try {
+          const stepsToCreate = step.map((s) => {
+            return { ...s, ressourceId: ressource.id };
+          });
+          await this.stepService.createMany(stepsToCreate);
+        } catch (e) {
+          console.error(e);
+          throw new InternalServerErrorException(
+            'Une erreur inconnue est survenue',
+          );
+        }
+      }
+
+      const ressourceFinal = await this.prisma.ressource.findUnique({
+        where: { id: ressource.id },
         select: {
           id: true,
           title: true,
@@ -74,7 +100,7 @@ export class RessourceService {
         },
       });
 
-      return { data: Ressource, message: 'Ressources créé avec succès' };
+      return { data: ressourceFinal, message: 'Ressources créé avec succès' };
     } catch (error) {
       if (error.code === 'P2002') {
         throw new BadRequestException(

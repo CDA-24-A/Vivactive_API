@@ -49,6 +49,7 @@ export class RoleService {
       const role = await this.prisma.role.findMany({
         select: {
           name: true,
+          id: true,
         },
       });
 
@@ -79,6 +80,7 @@ export class RoleService {
         where: { id: id },
         select: {
           name: true,
+          id: true,
         },
       });
 

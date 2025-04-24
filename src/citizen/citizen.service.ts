@@ -350,12 +350,7 @@ export class CitizenService {
 
   async updateCredentials(updateCitizenDto: UpdateCitizenCredentialsDto) {
     try {
-      const citizenData = updateCitizenDto;
-
-      await this.clerkService.updateClerkUserCredentials(
-        citizenData.clerkId,
-        updateCitizenDto,
-      );
+      await this.clerkService.updateClerkUserCredentials(updateCitizenDto);
 
       return { message: 'Mot de passe mis à jour avec succès' };
     } catch (error) {

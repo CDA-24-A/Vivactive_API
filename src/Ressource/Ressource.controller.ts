@@ -34,7 +34,7 @@ export class RessourceController {
   @Get('/citizen/:citizenId')
   findCitizenRessources(
     @Param('citizenId') citizenId: string,
-  ): Promise<ApiReturns<unknown> | null> {
+  ): Promise<ApiReturns<RessourceTypeCitizen[]> | null> {
     return this.RessourceService.findCitizenRessource(citizenId);
   }
 

@@ -81,7 +81,9 @@ export class RessourceController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string): Promise<string | { message: string }> {
+  remove(
+    @Param('id') id: string,
+  ): Promise<string | { data: boolean; message: string }> {
     return this.RessourceService.remove(id);
   }
 }

@@ -20,7 +20,7 @@ model Citizen {
   email String  @unique 
   name  String 
   surname String
-  role Role @relation(fields: [roleId], references: [id])
+  role Role @relation(fields: [roleId], references: [id] , onDelete: Cascade)
   roleId String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
@@ -49,11 +49,11 @@ model Ressource {
   maxParticipant Int?     
   nbParticipant  Int @default(0)     
   deadLine       DateTime?
-  category       Category @relation(fields: [categoryId], references: [id])
+  category       Category @relation(fields: [categoryId], references: [id] , onDelete: Cascade)
   categoryId     String
-  file           File?    @relation(fields: [fileId], references: [id])
+  file           File?    @relation(fields: [fileId], references: [id] , onDelete: Cascade)
   fileId         String?
-  banner         Image?   @relation(fields: [bannerId], references: [id])
+  banner         Image?   @relation(fields: [bannerId], references: [id] , onDelete: Cascade)
   bannerId       String?
   step           Step[]
   favorites      Favorite[]
@@ -62,11 +62,11 @@ model Ressource {
   message        Message[]
   isValidate     Boolean @default(false)
   status         String
-  typeRessource   TypeRessource @relation(fields: [typeRessourceId], references: [id])
+  typeRessource   TypeRessource @relation(fields: [typeRessourceId], references: [id] , onDelete: Cascade)
   typeRessourceId String
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
-  citizen Citizen? @relation(fields : [citizenId], references: [id])
+  citizen Citizen? @relation(fields : [citizenId], references: [id] , onDelete: Cascade)
   citizenId String? 
   Invite Invite[]
 }
@@ -96,9 +96,9 @@ model Comment {
   id  String  @id @default(uuid())
   title String
   description String
-  citizen Citizen @relation(fields: [citizenId], references: [id])
+  citizen Citizen @relation(fields: [citizenId], references: [id] , onDelete: Cascade)
   citizenId String
-  ressource Ressource @relation(fields:[ressourceId], references :[id])
+  ressource Ressource @relation(fields:[ressourceId], references :[id] , onDelete: Cascade)
   ressourceId String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
@@ -109,7 +109,7 @@ model Step {
   title String
   description String
   order Int
-  ressource Ressource @relation(fields: [ressourceId], references: [id])
+  ressource Ressource @relation(fields: [ressourceId], references: [id] , onDelete: Cascade)
   ressourceId String
   progression Progression[]
 }
@@ -118,11 +118,11 @@ model Progression {
   id  String  @id @default(uuid())
   completed Boolean @default(false)
   dateCompleted  DateTime?
-  citizen Citizen @relation(fields: [citizenId], references: [id])
+  citizen Citizen @relation(fields: [citizenId], references: [id] , onDelete: Cascade)
   citizenId String
-  step Step @relation(fields:[stepId], references : [id])
+  step Step @relation(fields:[stepId], references : [id] , onDelete: Cascade)
   stepId String
-  ressource Ressource @relation(fields : [ressourceId], references : [id])
+  ressource Ressource @relation(fields : [ressourceId], references : [id] , onDelete: Cascade)
   ressourceId String
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
@@ -130,9 +130,9 @@ model Progression {
 
 model Favorite {
   id String  @id @default(uuid())
-  citizen Citizen @relation(fields: [citizenId], references: [id])
+  citizen Citizen @relation(fields: [citizenId], references: [id] , onDelete: Cascade)
   citizenId String
-  ressource Ressource @relation(fields: [ressourceId], references: [id])
+  ressource Ressource @relation(fields: [ressourceId], references: [id] , onDelete: Cascade)
   ressourceId String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -144,9 +144,9 @@ model Favorite {
 model Message {
   id  String  @id @default(uuid())
   message String
-  citizen Citizen @relation(fields: [citizenId], references: [id])
+  citizen Citizen @relation(fields: [citizenId], references: [id] , onDelete: Cascade)
   citizenId String
-  ressource Ressource @relation(fields:[ressourceId], references :[id])
+  ressource Ressource @relation(fields:[ressourceId], references :[id] , onDelete: Cascade)
   ressourceId String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())
@@ -163,12 +163,12 @@ model TypeRessource {
 
 model Invite {
   id         String  @id @default(uuid())
-  sender     Citizen @relation("CitizenSentInvites", fields: [senderId], references: [id])
+  sender     Citizen @relation("CitizenSentInvites", fields: [senderId], references: [id] , onDelete: Cascade)
   senderId   String
-  recever    Citizen @relation("CitizenReceivedInvites", fields: [receverId], references: [id])
+  recever    Citizen @relation("CitizenReceivedInvites", fields: [receverId], references: [id] , onDelete: Cascade)
   receverId  String
   accept     Boolean @default(false)
-  ressource Ressource @relation(fields: [ressourceId], references: [id])
+  ressource Ressource @relation(fields: [ressourceId], references: [id] , onDelete: Cascade)
   ressourceId String
   createdAt  DateTime @default(now())
   updatedAt DateTime @updatedAt @default(now())

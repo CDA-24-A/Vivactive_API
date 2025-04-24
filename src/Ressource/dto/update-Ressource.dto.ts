@@ -8,11 +8,9 @@ import {
 
 export class UpdateRessourceDto {
   @IsOptional()
-  @IsNotEmpty()
   title: string;
 
   @IsOptional()
-  @IsNotEmpty()
   description: string;
 
   @IsOptional()
@@ -28,11 +26,9 @@ export class UpdateRessourceDto {
   deadLine: Date;
 
   @IsOptional()
-  @IsNotEmpty()
   typeRessourceId: string;
 
   @IsOptional()
-  @IsNotEmpty()
   categoryId: string;
 
   @IsOptional()
@@ -46,6 +42,5 @@ export class UpdateRessourceDto {
   isValidate: boolean;
 
   @IsOptional()
-  @IsNotEmpty()
   status: string;
 }

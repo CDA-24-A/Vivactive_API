@@ -12,6 +12,7 @@ import { ClerkService } from 'src/auth/clerk.service';
 import { PrismaService } from 'src/prisma.service';
 import { ProgressionService } from 'src/progression/progression.service';
 import { typeRessource } from './data/resourceType';
+import { generateInvites } from './data/invitation';
 
 const prisma = new PrismaClient();
 const citizenService = new CitizenService(
@@ -103,6 +104,7 @@ async function main() {
   const generatedRessources = generateRessourcesSeed(
     bddCategories.map((cat) => cat.id),
     bddResourceType[0].id,
+    demoCitizen.id,
   );
 
   await prisma.ressource.createMany({
@@ -294,6 +296,20 @@ async function main() {
     console.log(
       'Les ressources ont été ajoutées aux favoris du citizen demo !',
     );
+  }
+
+  const otherCitizens = citizens.filter((c) => c.id !== demoCitizen.id);
+
+  if (otherCitizens.length > 0 && bddRessources.length > 0) {
+    const invites = generateInvites({
+      demoCitizenId: demoCitizen.id,
+      otherCitizenIds: otherCitizens.map((c) => c.id),
+      ressourceIds: bddRessources.map((r) => r.id),
+      count: 10,
+    });
+
+    await prisma.invite.createMany({ data: invites });
+    console.log('Invitations avec demoCitizen générées et insérées');
   }
 }
 main()

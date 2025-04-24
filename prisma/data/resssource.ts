@@ -69,6 +69,7 @@ const titlesAndDescriptions = [
 export function generateRessourcesSeed(
   categoryIds: string[],
   typeRessourceId: string,
+  citizenDemoId: string,
 ) {
   if (categoryIds.length === 0) {
     throw new Error('Le tableau de categoryIds ne peut pas être vide.');
@@ -89,6 +90,7 @@ export function generateRessourcesSeed(
       typeRessourceId: typeRessourceId,
       isValidate: true,
       status: 'En cours',
+      citizenId: citizenDemoId,
       createdAt: new Date(),
       updatedAt: new Date(),
     },
@@ -103,6 +105,7 @@ export function generateRessourcesSeed(
       typeRessourceId: typeRessourceId,
       isValidate: true,
       status: 'Validé',
+      citizenId: citizenDemoId,
       createdAt: new Date(),
       updatedAt: new Date(),
     },
@@ -131,6 +134,7 @@ export function generateRessourcesSeed(
       typeRessourceId: typeRessourceId,
       isValidate: false,
       status: 'En attente',
+      citizenId: citizenDemoId,
       createdAt: new Date(),
       updatedAt: new Date(),
     },

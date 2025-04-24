@@ -10,14 +10,19 @@ import { CreateRessourceDto } from './dto/create-Ressource.dto';
 import { UpdateRessourceDto } from './dto/update-Ressource.dto';
 import { PrismaService } from 'src/prisma.service';
 import { RessourceStatus } from 'src/utils/ressourceStatus.enum';
+import { StepService } from 'src/step/step.service';
 
 @Injectable()
 export class RessourceService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private stepService: StepService,
+  ) {}
 
   async create(createRessourceDto: CreateRessourceDto) {
     try {
-      const { fileBytes, bannerBytes, ...ressourceData } = createRessourceDto;
+      const { fileBytes, bannerBytes, step, ...ressourceData } =
+        createRessourceDto;
 
       let file: { id: string } | null = null;
       let banner: { id: string } | null = null;
@@ -40,13 +45,35 @@ export class RessourceService {
         });
       }
 
-      const Ressource = await this.prisma.ressource.create({
+      const ressource = await this.prisma.ressource.create({
         data: {
           ...ressourceData,
           fileId: file?.id,
           bannerId: banner?.id,
           status: ressourceData.status || RessourceStatus.EN_ATTENTE,
+          citizenId: ressourceData.citizenId,
         },
+        select: {
+          id: true,
+        },
+      });
+
+      if (ressource && step && step?.length > 0) {
+        try {
+          const stepsToCreate = step.map((s) => {
+            return { ...s, ressourceId: ressource.id };
+          });
+          await this.stepService.createMany(stepsToCreate);
+        } catch (e) {
+          console.error(e);
+          throw new InternalServerErrorException(
+            'Une erreur inconnue est survenue',
+          );
+        }
+      }
+
+      const ressourceFinal = await this.prisma.ressource.findUnique({
+        where: { id: ressource.id },
         select: {
           id: true,
           title: true,
@@ -71,10 +98,17 @@ export class RessourceService {
           typeRessource: {
             select: { id: true, name: true },
           },
+          citizen: {
+            select: {
+              id: true,
+              name: true,
+              surname: true,
+            },
+          },
         },
       });
 
-      return { data: Ressource, message: 'Ressources créé avec succès' };
+      return { data: ressourceFinal, message: 'Ressources créé avec succès' };
     } catch (error) {
       if (error.code === 'P2002') {
         throw new BadRequestException(
@@ -150,6 +184,13 @@ export class RessourceService {
           typeRessource: {
             select: { id: true, name: true },
           },
+          citizen: {
+            select: {
+              id: true,
+              name: true,
+              surname: true,
+            },
+          },
         },
       });
 
@@ -209,6 +250,7 @@ export class RessourceService {
               updatedAt: true,
               citizen: {
                 select: {
+                  id: true,
                   name: true,
                   surname: true,
                 },
@@ -217,6 +259,49 @@ export class RessourceService {
           },
           typeRessource: {
             select: { id: true, name: true },
+          },
+          citizen: {
+            select: {
+              id: true,
+              name: true,
+              surname: true,
+            },
+          },
+        },
+      });
+
+      if (!Ressource) {
+        throw new NotFoundException('Ressources non trouvé');
+      }
+
+      return { data: Ressource, message: 'Ressources récupéré avec succès' };
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      console.error(error);
+      throw new InternalServerErrorException(
+        'Une erreur inconnue est survenue',
+      );
+    }
+  }
+
+  async findCitizenRessource(citizenId: string) {
+    try {
+      const Ressource = await this.prisma.ressource.findMany({
+        where: { citizenId },
+        select: {
+          id: true,
+          title: true,
+          deadLine: true,
+          isValidate: true,
+          status: true,
+          citizen: {
+            select: {
+              id: true,
+              name: true,
+              surname: true,
+            },
           },
         },
       });
@@ -263,6 +348,13 @@ export class RessourceService {
           typeRessource: {
             select: { id: true, name: true },
           },
+          citizen: {
+            select: {
+              id: true,
+              name: true,
+              surname: true,
+            },
+          },
         },
       });
 
@@ -287,15 +379,22 @@ export class RessourceService {
 
   async remove(id: string) {
     try {
-      const Ressource = await this.prisma.ressource.findUnique({
+      const ressource = await this.prisma.ressource.findUnique({
         where: { id: id },
       });
-      if (!Ressource) {
+      if (!ressource) {
         throw new NotFoundException('Ressources non trouvé');
       }
 
-      await this.prisma.ressource.delete({ where: { id: id } });
-      return { message: 'Ressources supprimé avec succès' };
+      await this.prisma.step.deleteMany({
+        where: { ressourceId: ressource.id },
+      });
+
+      await this.prisma.ressource.delete({
+        where: { id: id },
+      });
+
+      return { data: true, message: 'Ressources supprimé avec succès' };
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw error;
@@ -314,7 +413,7 @@ export class RessourceService {
   async validateRessource(id: string) {
     try {
       const Ressource = await this.prisma.ressource.update({
-        data: { isValidate: true },
+        data: { isValidate: true, status: RessourceStatus.VALIDE },
         where: { id: id },
         select: {
           id: true,

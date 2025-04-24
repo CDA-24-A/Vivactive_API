@@ -30,6 +30,7 @@ model Citizen {
   favorites Favorite[]
   InviteSent Invite[] @relation("CitizenSentInvites")
   InviteRecieved Invite[] @relation("CitizenReceivedInvites")
+  ressources Ressource[]
 }
 
 
@@ -65,7 +66,8 @@ model Ressource {
   typeRessourceId String
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
-
+  citizen Citizen? @relation(fields : [citizenId], references: [id])
+  citizenId String? 
   Invite Invite[]
 }
 

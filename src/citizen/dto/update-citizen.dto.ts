@@ -4,9 +4,6 @@ export class UpdateCitizenDto {
   @IsNotEmpty()
   clerkId: string;
 
-  @IsNotEmpty()
-  id: string;
-
   @IsOptional()
   name: string;
 
@@ -14,13 +11,16 @@ export class UpdateCitizenDto {
   surname: string;
 
   @IsOptional()
-  email: string;
-
-  @IsOptional()
   roleId: string;
 }
 
 export class UpdateCitizenCredentialsDto extends UpdateCitizenDto {
   @IsNotEmpty()
+  oldPassword: string;
+
+  @IsNotEmpty()
   password: string;
+
+  @IsNotEmpty()
+  clerkId: string;
 }

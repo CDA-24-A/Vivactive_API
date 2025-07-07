@@ -1,5 +1,3 @@
-
-
 {
   "name": "vivactive-api",
   "version": "0.0.1",
@@ -28,7 +26,7 @@
   },
   "dependencies": {
     "@clerk/clerk-sdk-node": "^5.1.6",
-    "@faker-js/faker": "^9.4.0",
+    "@faker-js/faker": "^9.9.0",
     "@nestjs/common": "^11.0.1",
     "@nestjs/core": "^11.0.1",
     "@nestjs/mapped-types": "*",
@@ -74,16 +72,22 @@
     "typescript-eslint": "^8.23.0"
   },
   "jest": {
-  "preset": "ts-jest",
-  "modulePathIgnorePatterns": [],
-  "moduleFileExtensions": ["ts", "js", "json"],
-  "rootDir": ".",
-  "testMatch": ["**/*.spec.ts"],
-  "transform": {
-    "^.+\\.(t|j)s$": "ts-jest"
-  },
-  "moduleNameMapper": {
-    "^src/(.*)$": "<rootDir>/src/$1"
+    "preset": "ts-jest",
+    "modulePathIgnorePatterns": [],
+    "moduleFileExtensions": [
+      "ts",
+      "js",
+      "json"
+    ],
+    "rootDir": ".",
+    "testMatch": [
+      "**/*.spec.ts"
+    ],
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "moduleNameMapper": {
+      "^src/(.*)$": "<rootDir>/src/$1"
+    }
   }
-}
 }

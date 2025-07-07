@@ -309,6 +309,8 @@ export class CitizenService {
   async update(id: string, updateCitizenDto: UpdateCitizenDto) {
     try {
       const citizenData = updateCitizenDto;
+      
+      console.log('updateCitizenDto:', updateCitizenDto);
 
       await this.clerkService.updateClerkUser(
         citizenData.clerkId,

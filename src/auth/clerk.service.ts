@@ -57,14 +57,29 @@ export class ClerkService {
   }
 
   async updateClerkUserCredentials(
-    clerkId: string,
-    citizenData: UpdateCitizenCredentialsDto,
+    updateCitizenDto: UpdateCitizenCredentialsDto,
   ) {
     try {
-      const response = await clerkClient.users.updateUser(clerkId, {
-        password: citizenData.password,
+      const isPasswordIsVerify = await clerkClient.users.verifyPassword({
+        userId: updateCitizenDto.clerkId,
+        password: updateCitizenDto.oldPassword,
       });
-      return response;
+      if (isPasswordIsVerify) {
+        const response = await clerkClient.users.updateUser(
+          updateCitizenDto.clerkId,
+          {
+            password: updateCitizenDto.password,
+          },
+        );
+        return response;
+      } else {
+        console.error(
+          'Erreur Clerk: erreur lors de la vérification des crédentials',
+        );
+        throw new InternalServerErrorException(
+          'Erreur Clerk: erreur lors de la vérification des crédentials',
+        );
+      }
     } catch (error) {
       console.error('Erreur Clerk:', error.response?.data || error.message);
       throw new InternalServerErrorException(

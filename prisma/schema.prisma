@@ -30,6 +30,7 @@ model Citizen {
   favorites Favorite[]
   InviteSent Invite[] @relation("CitizenSentInvites")
   InviteRecieved Invite[] @relation("CitizenReceivedInvites")
+  ressources Ressource[]
 }
 
 
@@ -46,7 +47,7 @@ model Ressource {
   title          String
   description    String
   maxParticipant Int?     
-  nbParticipant  Int?     
+  nbParticipant  Int @default(0)     
   deadLine       DateTime?
   category       Category @relation(fields: [categoryId], references: [id])
   categoryId     String
@@ -61,11 +62,12 @@ model Ressource {
   message        Message[]
   isValidate     Boolean @default(false)
   status         String
-  ressourceType   RessourceType @relation(fields: [ressourceTypeId], references: [id])
-  ressourceTypeId String
+  typeRessource   TypeRessource @relation(fields: [typeRessourceId], references: [id])
+  typeRessourceId String
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
-
+  citizen Citizen? @relation(fields : [citizenId], references: [id])
+  citizenId String? 
   Invite Invite[]
 }
 
@@ -150,7 +152,7 @@ model Message {
   updatedAt DateTime @updatedAt @default(now())
 }
 
-model RessourceType {
+model TypeRessource {
   id         String      @id @default(uuid())
   name       String
   ressource   Ressource[]

@@ -1,7 +1,7 @@
 export enum RessourceStatus {
   EN_ATTENTE = 'En attente',
-  VALIDEE = 'Validéee',
-  CLOTUREE = 'Cloturée',
+  VALIDE = 'Validé',
+  CLOTURE = 'Cloturée',
   EN_COURS = 'En cours',
-  EXPIREE = 'Expirée',
+  EXPIRE = 'Expiré',
 }

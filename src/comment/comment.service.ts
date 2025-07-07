@@ -66,6 +66,7 @@ export class CommentService {
           updatedAt: true,
           citizen: {
             select: {
+              id: true,
               name: true,
               surname: true,
             },
@@ -106,6 +107,7 @@ export class CommentService {
           updatedAt: true,
           citizen: {
             select: {
+              id: true,
               name: true,
               surname: true,
             },

@@ -64,21 +64,16 @@ const titlesAndDescriptions = [
     description:
       'Avec des matériaux simples, fabriquez un objet utile pour votre maison : une étagère, un porte-manteau, ou un rangement. À faire ensemble, étape par étape !',
   },
-  {
-    title: 'Défi Jardinage : Créez un mini potager à la maison | DEMO !',
-    description:
-      'Plantez des herbes ou des légumes dans des pots et suivez ensemble les étapes de croissance. Un projet de jardinage à réaliser en famille ou avec des amis !',
-  },
 ];
 
 export function generateRessourcesSeed(
   categoryIds: string[],
-  ressourceTypeId: string,
+  typeRessourceId: string,
 ) {
   if (categoryIds.length === 0) {
     throw new Error('Le tableau de categoryIds ne peut pas être vide.');
   }
-  if (!ressourceTypeId) {
+  if (!typeRessourceId) {
     throw new Error('Le resourceId ne peut pas être vide.');
   }
 
@@ -91,7 +86,7 @@ export function generateRessourcesSeed(
       nbParticipant: 10,
       deadLine: new Date('2025-06-01'),
       categoryId: categoryIds[0 % categoryIds.length],
-      ressourceTypeId: ressourceTypeId,
+      typeRessourceId: typeRessourceId,
       isValidate: true,
       status: 'En cours',
       createdAt: new Date(),
@@ -105,9 +100,9 @@ export function generateRessourcesSeed(
       nbParticipant: 25,
       deadLine: new Date('2025-08-15'),
       categoryId: categoryIds[1 % categoryIds.length],
-      ressourceTypeId: ressourceTypeId,
+      typeRessourceId: typeRessourceId,
       isValidate: true,
-      status: 'Validée',
+      status: 'Validé',
       createdAt: new Date(),
       updatedAt: new Date(),
     },
@@ -119,9 +114,9 @@ export function generateRessourcesSeed(
       nbParticipant: 18,
       deadLine: new Date('2025-03-10'),
       categoryId: categoryIds[2 % categoryIds.length],
-      ressourceTypeId: ressourceTypeId,
+      typeRessourceId: typeRessourceId,
       isValidate: true,
-      status: 'Expirée',
+      status: 'Expiré',
       createdAt: new Date(),
       updatedAt: new Date(),
     },
@@ -133,9 +128,23 @@ export function generateRessourcesSeed(
       nbParticipant: 18,
       deadLine: new Date('2025-03-10'),
       categoryId: categoryIds[2 % categoryIds.length],
-      ressourceTypeId: ressourceTypeId,
+      typeRessourceId: typeRessourceId,
       isValidate: false,
       status: 'En attente',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
+      title: 'Défi Jardinage : Créez un mini potager à la maison | DEMO !',
+      description:
+        'Plantez des herbes ou des légumes dans des pots et suivez ensemble les étapes de croissance. Un projet de jardinage à réaliser en famille ou avec des amis !',
+      maxParticipant: 50,
+      nbParticipant: 7,
+      deadLine: new Date('2028-03-10'),
+      categoryId: categoryIds[2 % categoryIds.length],
+      typeRessourceId: typeRessourceId,
+      isValidate: true,
+      status: 'En cours',
       createdAt: new Date(),
       updatedAt: new Date(),
     },
@@ -148,9 +157,9 @@ export function generateRessourcesSeed(
     nbParticipant: Math.floor(Math.random() * 3),
     deadLine: new Date(`2025-12-${(i % 28) + 1}`),
     categoryId: categoryIds[i % categoryIds.length],
-    ressourceTypeId: ressourceTypeId,
+    typeRessourceId: typeRessourceId,
     isValidate: true,
-    status: i % 3 === 0 ? 'Validée' : 'En cours',
+    status: i % 3 === 0 ? 'Validé' : 'En cours',
     createdAt: new Date(),
     updatedAt: new Date(),
   }));

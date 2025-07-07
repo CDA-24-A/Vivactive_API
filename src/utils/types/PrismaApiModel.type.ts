@@ -10,7 +10,9 @@ import {
   Favorite as FavoriteModel,
   Message as MessageModel,
   Invite as InviteModel,
+  TypeRessource as TypeRessourceModel,
 } from '@prisma/client';
+import { RessourceStatus } from '../ressourceStatus.enum';
 
 export interface CitizenType
   extends Omit<
@@ -32,12 +34,30 @@ export interface RessourceType
     | 'bannerId'
     | 'file'
     | 'comment'
-    | 'ressourceTypeId'
-    | 'ressourceType'
+    | 'typeRessourceId'
+    | 'citizenId'
   > {
   file?: Omit<FileModel, 'resources'> | null;
   step: Array<Omit<StepModel, 'ressourceId'> | null>;
+  typeRessource: TypeRessourceType;
+  citizen: Pick<CitizenType, 'id' | 'name' | 'surname'> | null;
+  isValidate: boolean;
+  status: string;
 }
+
+export interface RessourceTypeCitizen
+  extends Omit<
+    RessourceType,
+    | 'step'
+    | 'typeRessource'
+    | 'citizen'
+    | 'id'
+    | 'description'
+    | 'title'
+    | 'maxParticipant'
+    | 'nbParticipant'
+    | 'deadLine'
+  > {}
 
 export interface RessourceWithCommentType extends RessourceType {
   comment: Array<RessourceComment | null>;
@@ -89,3 +109,8 @@ export interface InviteType
   sender: Omit<CitizenType, 'role' | 'id' | 'email'>;
   ressource: Pick<RessourceType, 'title'>;
 }
+
+export type TypeRessourceType = Omit<
+  TypeRessourceModel,
+  'createdAt' | 'updatedAt'
+>;

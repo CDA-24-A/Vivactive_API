@@ -9,5 +9,5 @@ export class UpdateProgressionDto extends PartialType(CreateProgressionDto) {
 
   @IsNotEmpty()
   @IsOptional()
-  dateCompleted: boolean;
+  dateCompleted: Date;
 }

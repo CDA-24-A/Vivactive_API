@@ -62,5 +62,5 @@ jobs:
       with: 
         context : .
         push: true
-        target: vivactive-api-backend #nom de l'image concerné dans le Dockerfile
+        target: VivActive-backend #nom de l'image concerné dans le Dockerfile
         tags: ghcr.io/cda-24-a/vivactive_api/vivactive-api-backend:recette  

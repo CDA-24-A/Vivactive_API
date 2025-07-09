@@ -10,7 +10,7 @@
 ALTER TABLE `Role` DROP FOREIGN KEY `Role_citizenId_fkey`;
 
 -- DropIndex
-DROP INDEX `Role_citizenId_key` ON `role`;
+DROP INDEX `Role_citizenId_key` ON `Role`;
 
 -- AlterTable
 ALTER TABLE `Citizen` ADD COLUMN `roleId` VARCHAR(191) NOT NULL;

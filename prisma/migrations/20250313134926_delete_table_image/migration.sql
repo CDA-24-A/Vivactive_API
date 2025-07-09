@@ -14,10 +14,10 @@ ALTER TABLE `Ressource` DROP FOREIGN KEY `Ressource_bannerId_fkey`;
 ALTER TABLE `Ressource` DROP FOREIGN KEY `Ressource_fileId_fkey`;
 
 -- DropIndex
-DROP INDEX `Ressource_bannerId_fkey` ON `ressource`;
+DROP INDEX `Ressource_bannerId_fkey` ON `Ressource`;
 
 -- DropIndex
-DROP INDEX `Ressource_fileId_fkey` ON `ressource`;
+DROP INDEX `Ressource_fileId_fkey` ON `Ressource`;
 
 -- AlterTable
 ALTER TABLE `Ressource` DROP COLUMN `bannerId`,

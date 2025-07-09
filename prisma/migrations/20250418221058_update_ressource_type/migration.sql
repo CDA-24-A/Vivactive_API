@@ -9,7 +9,7 @@
 ALTER TABLE `Ressource` DROP FOREIGN KEY `Ressource_resourceTypeId_fkey`;
 
 -- DropIndex
-DROP INDEX `Ressource_resourceTypeId_fkey` ON `ressource`;
+DROP INDEX `Ressource_resourceTypeId_fkey` ON `Ressource`;
 
 -- AlterTable
 ALTER TABLE `Ressource` DROP COLUMN `resourceTypeId`,

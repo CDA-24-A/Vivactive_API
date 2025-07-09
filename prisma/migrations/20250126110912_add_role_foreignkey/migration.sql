@@ -6,7 +6,7 @@
 
 */
 -- AlterTable
-ALTER TABLE `role` ADD COLUMN `citizenId` VARCHAR(191) NOT NULL;
+ALTER TABLE `Role` ADD COLUMN `citizenId` VARCHAR(191) NOT NULL;
 
 -- CreateIndex
 CREATE UNIQUE INDEX `Role_citizenId_key` ON `Role`(`citizenId`);

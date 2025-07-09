@@ -5,7 +5,7 @@
 
 */
 -- AlterTable
-ALTER TABLE `ressource` ADD COLUMN `resourceTypeId` VARCHAR(191) NOT NULL;
+ALTER TABLE `Ressource` ADD COLUMN `resourceTypeId` VARCHAR(191) NOT NULL;
 
 -- CreateTable
 CREATE TABLE `RessourceType` (

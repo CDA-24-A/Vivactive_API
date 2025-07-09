@@ -6,7 +6,7 @@
 
 */
 -- AlterTable
-ALTER TABLE `ressource` DROP COLUMN `banner`,
+ALTER TABLE `Ressource` DROP COLUMN `banner`,
     DROP COLUMN `file`,
     ADD COLUMN `bannerId` VARCHAR(191) NULL,
     ADD COLUMN `fileId` VARCHAR(191) NULL;

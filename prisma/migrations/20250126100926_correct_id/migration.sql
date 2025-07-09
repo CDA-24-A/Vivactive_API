@@ -6,15 +6,15 @@
 
 */
 -- DropForeignKey
-ALTER TABLE `citizen` DROP FOREIGN KEY `Citizen_roleId_fkey`;
+ALTER TABLE `Citizen` DROP FOREIGN KEY `Citizen_roleId_fkey`;
 
 -- AlterTable
-ALTER TABLE `citizen` DROP PRIMARY KEY,
+ALTER TABLE `Citizen` DROP PRIMARY KEY,
     MODIFY `id` VARCHAR(191) NOT NULL,
     ADD PRIMARY KEY (`id`);
 
 -- AlterTable
-ALTER TABLE `role` DROP PRIMARY KEY,
+ALTER TABLE `Role` DROP PRIMARY KEY,
     MODIFY `id` VARCHAR(191) NOT NULL,
     ADD PRIMARY KEY (`id`);
 

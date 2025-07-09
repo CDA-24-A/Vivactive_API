@@ -5,7 +5,7 @@
 
 */
 -- AlterTable
-ALTER TABLE `progression` ADD COLUMN `ressourceId` VARCHAR(191) NOT NULL;
+ALTER TABLE `Progression` ADD COLUMN `ressourceId` VARCHAR(191) NOT NULL;
 
 -- AddForeignKey
 ALTER TABLE `Progression` ADD CONSTRAINT `Progression_ressourceId_fkey` FOREIGN KEY (`ressourceId`) REFERENCES `Ressource`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

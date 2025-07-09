@@ -8,7 +8,7 @@
 
 */
 -- AlterTable
-ALTER TABLE `message` DROP COLUMN `description`,
+ALTER TABLE `Message` DROP COLUMN `description`,
     DROP COLUMN `title`,
     ADD COLUMN `message` VARCHAR(191) NOT NULL,
     ADD COLUMN `ressourceId` VARCHAR(191) NOT NULL;

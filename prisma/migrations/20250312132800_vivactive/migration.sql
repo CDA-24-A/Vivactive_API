@@ -5,16 +5,16 @@
 
 */
 -- DropForeignKey
-ALTER TABLE `resource` DROP FOREIGN KEY `Resource_bannerId_fkey`;
+ALTER TABLE `Resource` DROP FOREIGN KEY `Resource_bannerId_fkey`;
 
 -- DropForeignKey
-ALTER TABLE `resource` DROP FOREIGN KEY `Resource_categoryId_fkey`;
+ALTER TABLE `Resource` DROP FOREIGN KEY `Resource_categoryId_fkey`;
 
 -- DropForeignKey
-ALTER TABLE `resource` DROP FOREIGN KEY `Resource_fileId_fkey`;
+ALTER TABLE `Resource` DROP FOREIGN KEY `Resource_fileId_fkey`;
 
 -- DropTable
-DROP TABLE `resource`;
+DROP TABLE `Resource`;
 
 -- CreateTable
 CREATE TABLE `Ressource` (

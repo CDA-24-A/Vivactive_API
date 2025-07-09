@@ -8,10 +8,10 @@
 
 */
 -- DropForeignKey
-ALTER TABLE `ressource` DROP FOREIGN KEY `Ressource_bannerId_fkey`;
+ALTER TABLE `Ressource` DROP FOREIGN KEY `Ressource_bannerId_fkey`;
 
 -- DropForeignKey
-ALTER TABLE `ressource` DROP FOREIGN KEY `Ressource_fileId_fkey`;
+ALTER TABLE `Ressource` DROP FOREIGN KEY `Ressource_fileId_fkey`;
 
 -- DropIndex
 DROP INDEX `Ressource_bannerId_fkey` ON `ressource`;
@@ -20,13 +20,13 @@ DROP INDEX `Ressource_bannerId_fkey` ON `ressource`;
 DROP INDEX `Ressource_fileId_fkey` ON `ressource`;
 
 -- AlterTable
-ALTER TABLE `ressource` DROP COLUMN `bannerId`,
+ALTER TABLE `Ressource` DROP COLUMN `bannerId`,
     DROP COLUMN `fileId`,
     ADD COLUMN `banner` VARCHAR(191) NULL,
     ADD COLUMN `file` VARCHAR(191) NULL;
 
 -- DropTable
-DROP TABLE `file`;
+DROP TABLE `File`;
 
 -- DropTable
-DROP TABLE `image`;
+DROP TABLE `Image`;

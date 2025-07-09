@@ -7,7 +7,7 @@
 
 */
 -- AlterTable
-ALTER TABLE `comment` ADD COLUMN `ressourceId` VARCHAR(191) NOT NULL;
+ALTER TABLE `Comment` ADD COLUMN `ressourceId` VARCHAR(191) NOT NULL;
 
 -- AddForeignKey
 ALTER TABLE `Comment` ADD CONSTRAINT `Comment_ressourceId_fkey` FOREIGN KEY (`ressourceId`) REFERENCES `Ressource`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -5,13 +5,13 @@
 
 */
 -- DropForeignKey
-ALTER TABLE `ressource` DROP FOREIGN KEY `Ressource_typeRessourceId_fkey`;
+ALTER TABLE `Ressource` DROP FOREIGN KEY `Ressource_typeRessourceId_fkey`;
 
 -- DropIndex
 DROP INDEX `Ressource_typeRessourceId_fkey` ON `ressource`;
 
 -- DropTable
-DROP TABLE `ressourcetype`;
+DROP TABLE `Ressourcetype`;
 
 -- CreateTable
 CREATE TABLE `TypeRessource` (

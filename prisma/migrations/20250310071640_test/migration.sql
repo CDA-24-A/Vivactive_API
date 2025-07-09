@@ -1,5 +1,5 @@
 -- DropForeignKey
-ALTER TABLE `resource` DROP FOREIGN KEY `Resource_categoryId_fkey`;
+ALTER TABLE `Resource` DROP FOREIGN KEY `Resource_categoryId_fkey`;
 
 -- DropIndex
 DROP INDEX `Resource_categoryId_fkey` ON `Resource`;

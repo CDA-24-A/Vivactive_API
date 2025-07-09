@@ -5,10 +5,10 @@
 
 */
 -- DropForeignKey
-ALTER TABLE `citizen` DROP FOREIGN KEY `Citizen_id_fkey`;
+ALTER TABLE `Citizen` DROP FOREIGN KEY `Citizen_id_fkey`;
 
 -- DropIndex
 DROP INDEX `Citizen_roleId_key` ON `citizen`;
 
 -- AlterTable
-ALTER TABLE `citizen` DROP COLUMN `roleId`;
+ALTER TABLE `Citizen` DROP COLUMN `roleId`;

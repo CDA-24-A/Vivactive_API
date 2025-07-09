@@ -5,7 +5,7 @@
 
 */
 -- AlterTable
-ALTER TABLE `invite` ADD COLUMN `ressourceId` VARCHAR(191) NOT NULL;
+ALTER TABLE `Invite` ADD COLUMN `ressourceId` VARCHAR(191) NOT NULL;
 
 -- AddForeignKey
 ALTER TABLE `Invite` ADD CONSTRAINT `Invite_ressourceId_fkey` FOREIGN KEY (`ressourceId`) REFERENCES `Ressource`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

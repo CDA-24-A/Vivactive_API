@@ -5,7 +5,7 @@
 
 */
 -- AlterTable
-ALTER TABLE `progression` ADD COLUMN `stepId` VARCHAR(191) NOT NULL,
+ALTER TABLE `Progression` ADD COLUMN `stepId` VARCHAR(191) NOT NULL,
     MODIFY `completed` BOOLEAN NOT NULL DEFAULT false;
 
 -- AddForeignKey

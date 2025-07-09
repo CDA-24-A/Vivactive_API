@@ -7,16 +7,16 @@
 
 */
 -- DropForeignKey
-ALTER TABLE `role` DROP FOREIGN KEY `Role_citizenId_fkey`;
+ALTER TABLE `Role` DROP FOREIGN KEY `Role_citizenId_fkey`;
 
 -- DropIndex
 DROP INDEX `Role_citizenId_key` ON `role`;
 
 -- AlterTable
-ALTER TABLE `citizen` ADD COLUMN `roleId` VARCHAR(191) NOT NULL;
+ALTER TABLE `Citizen` ADD COLUMN `roleId` VARCHAR(191) NOT NULL;
 
 -- AlterTable
-ALTER TABLE `role` DROP COLUMN `citizenId`;
+ALTER TABLE `Cole` DROP COLUMN `citizenId`;
 
 -- CreateIndex
 CREATE UNIQUE INDEX `Citizen_roleId_key` ON `Citizen`(`roleId`);

@@ -1,2 +1,2 @@
 -- AlterTable
-ALTER TABLE `ressource` MODIFY `isValidate` BOOLEAN NOT NULL DEFAULT false;
+ALTER TABLE `Ressource` MODIFY `isValidate` BOOLEAN NOT NULL DEFAULT false;

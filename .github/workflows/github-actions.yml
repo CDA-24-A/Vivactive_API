@@ -20,7 +20,7 @@ jobs:
     - test
     steps:
       - run: echo "Lancement des étapes de construction"
-      - name: Check out repository code
+      - name: Check out repository co
         uses: actions/checkout@v4
       - run: echo "Le code du dépôt a été cloné sur le serveur d'exécution."
       - run: npm clean-install

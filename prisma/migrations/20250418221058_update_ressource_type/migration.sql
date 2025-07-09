@@ -6,13 +6,13 @@
 
 */
 -- DropForeignKey
-ALTER TABLE `ressource` DROP FOREIGN KEY `Ressource_resourceTypeId_fkey`;
+ALTER TABLE `Ressource` DROP FOREIGN KEY `Ressource_resourceTypeId_fkey`;
 
 -- DropIndex
 DROP INDEX `Ressource_resourceTypeId_fkey` ON `ressource`;
 
 -- AlterTable
-ALTER TABLE `ressource` DROP COLUMN `resourceTypeId`,
+ALTER TABLE `Ressource` DROP COLUMN `resourceTypeId`,
     ADD COLUMN `ressourceTypeId` VARCHAR(191) NOT NULL;
 
 -- AddForeignKey

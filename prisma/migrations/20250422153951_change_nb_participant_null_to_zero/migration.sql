@@ -5,4 +5,4 @@
 
 */
 -- AlterTable
-ALTER TABLE `ressource` MODIFY `nbParticipant` INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE `Ressource` MODIFY `nbParticipant` INTEGER NOT NULL DEFAULT 0;

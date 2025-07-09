@@ -16,7 +16,7 @@ DROP INDEX `Role_citizenId_key` ON `Role`;
 ALTER TABLE `Citizen` ADD COLUMN `roleId` VARCHAR(191) NOT NULL;
 
 -- AlterTable
-ALTER TABLE `Cole` DROP COLUMN `citizenId`;
+ALTER TABLE `Role` DROP COLUMN `citizenId`;
 
 -- CreateIndex
 CREATE UNIQUE INDEX `Citizen_roleId_key` ON `Citizen`(`roleId`);

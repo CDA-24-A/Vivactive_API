@@ -11,7 +11,7 @@ ALTER TABLE `Ressource` DROP FOREIGN KEY `Ressource_typeRessourceId_fkey`;
 DROP INDEX `Ressource_typeRessourceId_fkey` ON `Ressource`;
 
 -- DropTable
-DROP TABLE `Ressourcetype`;
+DROP TABLE `RessourceType`;
 
 -- CreateTable
 CREATE TABLE `TypeRessource` (

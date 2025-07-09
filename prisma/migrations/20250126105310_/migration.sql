@@ -8,7 +8,7 @@
 ALTER TABLE `Citizen` DROP FOREIGN KEY `Citizen_id_fkey`;
 
 -- DropIndex
-DROP INDEX `Citizen_roleId_key` ON `citizen`;
+DROP INDEX `Citizen_roleId_key` ON `Citizen`;
 
 -- AlterTable
 ALTER TABLE `Citizen` DROP COLUMN `roleId`;
